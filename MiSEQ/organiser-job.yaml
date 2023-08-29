@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Job # Later CronJob 0 22 * * 0
+metadata:
+  name: organise-sequencing
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: 33
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        runAsUser: 33
+        runAsGroup: 33
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+      - name: data-catalogue-organiser
+        image: bbmricz/data-catalogue-organiser:0.1
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        env:
+        - name: CATALOG-LOGIN
+          valueFrom:
+            secretKeyRef:
+              name: catalog-secret
+              key: username
+        - name: CATALOG-PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: catalog-secret
+              key: password
+        command: ["python", "/scripts/pipeline.py",
+                         "-r", "/pseudonymized/", \
+                         "-o", "/OrganisedRuns/", \
+                         "-p", "/Patients/", \
+                         "-l", "${CATALOG-LOGIN}", \
+                         "-pw", "${CATALOG-PASSWORD}"]
+        # Or it should be possible to use evn vars directly from python script
+        volumeMounts:
+        - name: data-catalogue-volume
+          mountPath: /pseudonymized/
+          subPath: PSEUDONYMIZED-MiSEQ
+        - name: data-catalogue-volume
+          mountPath: /OrganisedRuns/
+          subPath: OrganisedRuns
+        - name: data-catalogue-volume
+          mountPath: /Patients/
+          subPath: Patients
+        - name: data-wsi-volume
+          mountPath: /wsi/
+          subPath: tiff
+      volumes:
+      - name: data-catalogue-volume
+        persistantVolumeClaim:
+          claimName: pvc-data-catalogue-secret
+      - name: data-wsi-volume
+        PersistentVolumeClaim:
+          claimName: pvc-osd-secret

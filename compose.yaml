@@ -1,0 +1,14 @@
+version: '3.0'
+services:
+  run:
+    build: .
+    volumes: 
+      - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/MiSEQ:/pseudonymized
+      - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/OrganisedRuns:/OrganisedRuns
+      - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/Patients:/Patients
+    command: bash -c "python  /scripts/pipeline.py 
+                          -r /pseudonymized/ 
+                          -o /OrganisedRuns/
+                          -p /Patients/
+                          -l ${CATALOGUE_LOGIN}
+                          -pw ${CATALOGUE_PASSWORD}"

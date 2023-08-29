@@ -25,7 +25,7 @@ class Clinical:
         self.phenotype = ["NoInformation (NI, nullflavor)"]
         self.unobservedphenotype = ["NoInformation (NI, nullflavor)"]
         self.phenotypicdataavailable = ["NoInformation (NI, nullflavor)"]
-        self.clinicaldiagnosis = self._adjust_diagnosis(sample["diagnosis"]) if sample["material"] != "genome" else None
+        self.clinicaldiagnosis = "C50" #self._adjust_diagnosis(sample["diagnosis"]) if sample["material"] != "genome" else None
         self.moleculardiagnosisgene = ["NoInformation (NI, nullflavor)"]
         self.moleculardiagnosisother = None
         self.ageatdiagnosis = self._calculate_age_at_diagnosis(patient_dict["birth"].split("/")[1], sample)
