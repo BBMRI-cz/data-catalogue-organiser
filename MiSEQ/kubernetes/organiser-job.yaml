@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: organise-sequencing
+spec:
+  schedule: "0 12 * * 0"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            fsGroup: 1000
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroupChangePolicy: "OnRootMismatch"
+          containers:
+          - name: organise-sequencing
+            image: tomashoufek/data-catalogue-organiser:1.0.1
+            imagePullPolicy: Always
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+            env:
+              - name: CATALOG-LOGIN
+                valueFrom:
+                  secretKeyRef:
+                    name: catalog-secret
+                    key: username
+              - name: CATALOG-PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: catalog-secret
+                    key: password
+            command: ["python", "/scripts/pipeline.py", "-r", "/pseudonymized/", "-o", "/OrganisedRuns/", "-p", "/Patients/", "-l", "test", "-pw", "test", "-w",  /wsi/, "-d", "/Documents/libraries.csv"]
+            volumeMounts:
+            - name: storage-catalogue-volume
+              mountPath: /pseudonymized/
+              subPath: PSEUDONYMIZED-MiSEQ
+            - name: storage-catalogue-volume
+              mountPath: /OrganisedRuns/
+              subPath: OrganisedRuns
+            - name: storage-catalogue-volume
+              mountPath: /Patients/
+              subPath: Patients
+            - name: storage-catalogue-volume
+              mountPath: /Documents/
+              subPath: Documents
+            - name: data-wsi-volume
+              mountPath: /wsi/
+              subPath: tiff
+          restartPolicy: "OnFailure"
+          volumes:
+          - name: storage-catalogue-volume
+            persistentVolumeClaim:
+              claimName: pvc-storage-catalogue-secret
+          - name: data-wsi-volume
+            persistentVolumeClaim:
+              claimName: pvc-osd-secret

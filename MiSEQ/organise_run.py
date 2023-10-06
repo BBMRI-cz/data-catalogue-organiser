@@ -182,15 +182,3 @@ class RunOrganiser:
                 new_destination = os.path.join(patient_folder, sample["pseudo_ID"])
                 if not os.path.islink(new_destination):
                     os.symlink(f"{symlink_path}/", new_destination,  target_is_directory=True, dir_fd=1)
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        prog="Organiser",
-        description="Organise pseudonymized runs into a specifed output folder")
-    parser.add_argument("-r", "--run", type=str, required=True, help="Path to sequencing run path that will be pseudonymized")
-    parser.add_argument("-o", "--output", type=str, required=True, help="Path to the organise file")
-    parser.add_argument("-p", "--patients", type=str, required=True, help="Path to a patient folder")
-
-    args = parser.parse_args()
-    
-    RunOrganiser(args.run, args.output, args.patients)()

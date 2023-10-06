@@ -2,13 +2,19 @@ version: '3.0'
 services:
   run:
     build: .
-    volumes: 
+    env_file:
+      - .env
+    volumes:
       - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/MiSEQ:/pseudonymized
       - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/OrganisedRuns:/OrganisedRuns
       - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/Patients:/Patients
-    command: bash -c "python  /scripts/pipeline.py 
-                          -r /pseudonymized/ 
+      - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/WSI:/WSI
+      - /home/houfek/Work/MMCI/data-catalogue-playground/muni-sc/Libraries:/Libraries
+    command: bash -c "python  /scripts/pipeline.py
+                          -r /pseudonymized/
                           -o /OrganisedRuns/
                           -p /Patients/
+                          -w /WSI/
+                          -d /Libraries/
                           -l ${CATALOGUE_LOGIN}
                           -pw ${CATALOGUE_PASSWORD}"

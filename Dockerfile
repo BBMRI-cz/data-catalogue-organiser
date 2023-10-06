@@ -6,4 +6,4 @@ RUN mkdir /scripts
 
 COPY MiSEQ/* /scripts/
 
-USER 1000
+USER 1001

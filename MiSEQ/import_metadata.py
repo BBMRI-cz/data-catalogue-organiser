@@ -1,6 +1,9 @@
 import molgenis.client
 import json
 import os
+import uuid
+import pandas as pd
+from manage_libraries import LibrariesManager
 
 class Personal:
 
@@ -20,12 +23,12 @@ class Personal:
 class Clinical:
     def __init__(self, patient_dict):
         sample = patient_dict["samples"][0]
-        self.clinicalidentifier = patient_dict["ID"].replace("patient", "clinical")
+        self.clinicalidentifier = f"mmci_clinical_{uuid.UUID(int=int(sample['biopsy_number'].replace('/', '').replace('-', '')))}"
         self.belongstoperson = patient_dict["ID"]
         self.phenotype = ["NoInformation (NI, nullflavor)"]
         self.unobservedphenotype = ["NoInformation (NI, nullflavor)"]
         self.phenotypicdataavailable = ["NoInformation (NI, nullflavor)"]
-        self.clinicaldiagnosis = "C50" #self._adjust_diagnosis(sample["diagnosis"]) if sample["material"] != "genome" else None
+        self.clinicaldiagnosis = self._adjust_diagnosis(sample["diagnosis"]) if sample["material"] != "genome" else None
         self.moleculardiagnosisgene = ["NoInformation (NI, nullflavor)"]
         self.moleculardiagnosisother = None
         self.ageatdiagnosis = self._calculate_age_at_diagnosis(patient_dict["birth"].split("/")[1], sample)
@@ -49,16 +52,16 @@ class Clinical:
 
     def _adjust_diagnosis(self, diagnosis):
         if len(diagnosis) == 4:
-            return diagnosis[:3]
+            return diagnosis[:3] + "." + diagnosis[3]
         return diagnosis
 
 class Material:
 
-    def __init__(self, patient_dict, sample_dict):
+    def __init__(self, wsi_path, patient_dict, sample_dict):
         sample =  patient_dict["samples"][0]
         self.materialidentifier = sample["sample_ID"]
         self.collectedfromperson = patient_dict["ID"]
-        self.belongstodiagnosis = patient_dict["ID"].replace("patient", "clinical")
+        self.belongstodiagnosis = f"mmci_clinical_{uuid.UUID(int=int(sample['biopsy_number'].replace('/', '').replace('-', '')))}"
         self.samplingtimestamp = sample["cut_time"]
         self.registrationtimestamp = sample["freeze_time"]
         self.samplingprotocol = "NoInformation (NI, nullflavor)"
@@ -70,27 +73,38 @@ class Material:
         self.storageconditions = sample_dict["storCond"]
         self.expirationdate = None
         self.percentagetumourcells = None
-        self.physicallocation = "FFPE blocks at Department of Oncological Pathology MMCI" #TODO
+        self.physicallocation = "MMCI Biobank"
         self.derivedfrom = "NoInformation (NI, nullflavor)"
-        self.wholeslideimagesavailability = False #TODO
-        self.radiotherapyimagesavailability	= False #TODO
+        self.wholeslideimagesavailability = self._look_for_wsi(wsi_path, sample["biopsy_number"]) #TODO
+        self.radiotherapyimagesavailability	= False
+
+    def _look_for_wsi(self, wsi_path, biopsy_number):
+        return os.path.exists(os.path.join(wsi_path, self._make_path_from_biopsy_number(biopsy_number)))
+
+    def _make_path_from_biopsy_number(self, biopsy_number):
+        year = biopsy_number.split("/")[0]
+        remaining = biopsy_number.split("/")[1].split("-")[0].zfill(5)
+        fixed_biopsy = f"{year}_{remaining}-{biopsy_number.split('/')[1].split('-')[1]}"
+
+        return os.path.join(year, remaining[:2], remaining[2:], fixed_biopsy)
 
 class SamplePreparation:
 
-    def __init__(self, patient_dict):
+    def __init__(self, run_path, libraries_path, sample_sheet, patient_dict):
         sample = patient_dict["samples"][0]
-        self.sampleprepidentifier= sample["pseudo_ID"].replace("predictive", "sampleprep")
-        self.belongstomaterial= sample["sample_ID"]
-
-        # TODO wait for 'libraries_and_runs' to be final.
-        self.inputamount= "15"
-        self.librarypreparationkit="KAPA HyperPlus Kits by Roche"
-        self.pcrfree="false"
-        self.targetenrichmentkit="KAPA HyperPlus Kits by Roche"
-        self.umispresent= "false"
-        self.intendedinsertsize= "265"
-        self.intendedreadlength= "282"
-        # TODO
+        self.sampleprepidentifier = sample["pseudo_ID"].replace("predictive", "sampleprep")
+        self.belongstomaterial = sample["sample_ID"]
+        lib_data = LibrariesManager(libraries_path, sample_sheet, run_path, sample["pseudo_ID"]).get_data_from_libraries()
+        
+        if lib_data:
+            self.inputamount= lib_data["input_amount"]  #"10-25ngr"
+            self.librarypreparationkit= lib_data["library_prep_kit"]  #"KAPA HyperPlus Kits by Roche"
+            self.pcrfree= lib_data["pca_free"]
+            self.targetenrichmentkit=  lib_data["target_enrichment_kid"] #"KAPA HyperPlus Kits by Roche"
+            self.umispresent= lib_data["umi_present"] #"false"
+            self.intendedinsertsize= lib_data["intended_insert_size"] #"265"
+            self.intendedreadlength= lib_data["intended_read_length"] #"150"
+            self.genes = lib_data["genes"] #'ALK, APC, ARAF, BRAF, CH1, NRAS, PDGFRA, PIK3CA, PTEN, STK11, TP53*'
 
 class Sequencing:
     def __init__(self, patient_dict, sample_dict, run_metadata_dict):
@@ -115,8 +129,8 @@ class Analysis:
         self.belongstosequencing = sample["pseudo_ID"]
         self.physicaldatalocation = "Masaryk Memorial Cancer Istitute"
         self.abstractdatalocation = "Sensitive Cloud Institute of Computer Science"
-        self.dataformatsstored = [".fastq", "VCF"]
-        self.algorithmsused = None #TODO
+        self.dataformatsstored = ["bam", "VCF"]
+        self.algorithmsused = "NextGENe"
         self.referencegenomeused = "NoInformation (NI, nullflavor)"
         self.bioinformaticprotocolused = None
         self.bioinformaticprotocoldeviation = None
@@ -126,12 +140,16 @@ class Analysis:
 
 class MolgenisImporter:
 
-    def __init__(self, catalog_info, samples_metadata, run_metadata, login, password):
+    def __init__(self, run_path, wsi_path, libraries_path, login, password):
         self.session = molgenis.client.Session("https://data.bbmri.cz")
         self.session.login(login, password)
-        self.catalog_info_folder = catalog_info
-        self.samples_metadata_folder = samples_metadata
-        with open(run_metadata, "r") as f:
+        self.run_path =  run_path
+        self.catalog_info_folder = os.path.join(run_path, "catalog_info_per_pred_number")
+        self.samples_metadata_folder = os.path.join(run_path, "sample_metadata")
+        self.wsi_path = wsi_path
+        self.libraries_path = libraries_path
+        self.sample_sheet_path = os.path.join(run_path,"SampleSheet.csv")
+        with open(os.path.join(run_path,"run_metadata.json"), "r") as f:
             self.run_metadata = json.load(f)
 
     def __call__(self):
@@ -155,12 +173,12 @@ class MolgenisImporter:
             if clinical.clinicalidentifier not in clinical_ids:
                 self._add_data(clinical, 'fair-genomes_clinical')
 
-            material = Material(clinical_info_file, sample_metadata_file)
+            material = Material(self.wsi_path, clinical_info_file, sample_metadata_file)
             material_ids = [val["materialidentifier"] for val in self.session.get('fair-genomes_material')]
             if material.materialidentifier not in material_ids:
                 self._add_data(material, 'fair-genomes_material')
 
-            sample_preparation = SamplePreparation(clinical_info_file)
+            sample_preparation = SamplePreparation(self.run_path, self.libraries_path, self.sample_sheet_path, clinical_info_file)
             sample_prep_ids = [val["sampleprepidentifier"] for val in self.session.get('fair-genomes_samplepreparation')]
             if sample_preparation.sampleprepidentifier not in sample_prep_ids:
                 self._add_data(sample_preparation, 'fair-genomes_samplepreparation')
