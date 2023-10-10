@@ -79,14 +79,19 @@ class Material:
         self.radiotherapyimagesavailability	= False
 
     def _look_for_wsi(self, wsi_path, biopsy_number):
-        return os.path.exists(os.path.join(wsi_path, self._make_path_from_biopsy_number(biopsy_number)))
+        wsi_folder, biopsy_start = self._make_path_from_biopsy_number(biopsy_number)
+
+        print(wsi_folder, biopsy_start)
+        print(os.listdir(os.path.join(wsi_path, wsi_folder)))
+
+        return any(str(folder).startswith(biopsy_start) for folder in os.listdir(os.path.join(wsi_path, wsi_folder)))
 
     def _make_path_from_biopsy_number(self, biopsy_number):
         year = biopsy_number.split("/")[0]
         remaining = biopsy_number.split("/")[1].split("-")[0].zfill(5)
-        fixed_biopsy = f"{year}_{remaining}-{biopsy_number.split('/')[1].split('-')[1]}"
+        fixed_biopsy = f"{year}_{remaining}-{biopsy_number.split('/')[1].split('-')[1].zfill(2)}"
 
-        return os.path.join(year, remaining[:2], remaining[2:], fixed_biopsy)
+        return os.path.join(year, remaining[:2], remaining[2:]), fixed_biopsy
 
 class SamplePreparation:
 
@@ -129,7 +134,7 @@ class Analysis:
         self.belongstosequencing = sample["pseudo_ID"]
         self.physicaldatalocation = "Masaryk Memorial Cancer Istitute"
         self.abstractdatalocation = "Sensitive Cloud Institute of Computer Science"
-        self.dataformatsstored = ["bam", "VCF"]
+        self.dataformatsstored = ["BAM", "VCF"]
         self.algorithmsused = "NextGENe"
         self.referencegenomeused = "NoInformation (NI, nullflavor)"
         self.bioinformaticprotocolused = None

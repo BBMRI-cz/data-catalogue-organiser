@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: organise-sequencing
 spec:
-  schedule: "0 12 * * 0"
+  schedule: "0 22 * * 3,6"
   jobTemplate:
     spec:
       template:
@@ -36,11 +36,11 @@ spec:
                   secretKeyRef:
                     name: catalog-secret
                     key: password
-            command: ["python", "/scripts/pipeline.py", "-r", "/pseudonymized/", "-o", "/OrganisedRuns/", "-p", "/Patients/", "-l", "test", "-pw", "test", "-w",  /wsi/, "-d", "/Documents/libraries.csv"]
+            command: ["python", "/scripts/pipeline.py", "-r", "/pseudonymized/", "-o", "/OrganisedRuns/", "-p", "/Patients/", "-w",  /wsi/, "-d", "/Libraries/"]
             volumeMounts:
             - name: storage-catalogue-volume
               mountPath: /pseudonymized/
-              subPath: PSEUDONYMIZED-MiSEQ
+              subPath: PSEUDONYMIZED-MiSEQ-w-permit
             - name: storage-catalogue-volume
               mountPath: /OrganisedRuns/
               subPath: OrganisedRuns
@@ -48,12 +48,12 @@ spec:
               mountPath: /Patients/
               subPath: Patients
             - name: storage-catalogue-volume
-              mountPath: /Documents/
-              subPath: Documents
+              mountPath: /Libraries/
+              subPath: Libraries
             - name: data-wsi-volume
               mountPath: /wsi/
               subPath: tiff
-          restartPolicy: "OnFailure"
+          restartPolicy: "Never"
           volumes:
           - name: storage-catalogue-volume
             persistentVolumeClaim:

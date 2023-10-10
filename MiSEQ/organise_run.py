@@ -135,8 +135,10 @@ class RunOrganiser:
         new_bam = os.path.join(new_path, f"{pseudo_number}.bam")
         new_bam_bai = os.path.join(new_path, f"{pseudo_number}.bam.bai")
 
-        shutil.copy2(bam, new_bam)
-        shutil.copy2(bam_bai, new_bam_bai)
+        if os.path.exists(bam):
+            shutil.copy2(bam, new_bam)
+        if os.path.exists(bam_bai):
+            shutil.copy2(bam_bai, new_bam_bai)
     
     def get_outputs(self, path, new_path, pseudo_number):
         parameters = os.path.join(path, f"{pseudo_number}_Parameters.txt")
@@ -177,8 +179,8 @@ class RunOrganiser:
             with open(patient_metadata_file, "w") as f:
                 json.dump(patient, f, indent=4)
 
-            for sample in patient["samples"]:
-                symlink_path = os.path.join(samples_path, sample["pseudo_ID"])
-                new_destination = os.path.join(patient_folder, sample["pseudo_ID"])
-                if not os.path.islink(new_destination):
-                    os.symlink(f"{symlink_path}/", new_destination,  target_is_directory=True, dir_fd=1)
+            #for sample in patient["samples"]:
+                #symlink_path = os.path.join(samples_path, sample["pseudo_ID"])
+                #new_destination = os.path.join(patient_folder, sample["pseudo_ID"])
+                #if not os.path.islink(new_destination):
+                    #os.symlink(f"{symlink_path}/", new_destination,  target_is_directory=True, dir_fd=1)
