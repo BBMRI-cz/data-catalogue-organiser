@@ -22,7 +22,7 @@ class RunOrganiser:
         Path(run_path).mkdir(parents=True, exist_ok=True)
         self.create_sample_dirs(run_path, self.file)
         self.create_general_file(run_path, self.file)
-        self.create_patient_files(run_path, self.file)
+        self.create_patient_files(self.file)
         return os.path.join(y, machine, run_number, self.file)
 
     def split_file_to_parts(self, filename):
@@ -42,6 +42,7 @@ class RunOrganiser:
         pseudo_numbers = self.get_pseudo_numbers(sample_sheet_path)
         run_path = os.path.join(run_path, filename, "Samples")
         Path(run_path).mkdir(parents=True, exist_ok=True)
+
         for pseudo_number in pseudo_numbers:
             new_pseudo_folder = os.path.join(run_path, pseudo_number)
             Path(new_pseudo_folder).mkdir(parents=True, exist_ok=True)
@@ -124,22 +125,23 @@ class RunOrganiser:
         Path(new_analysis).mkdir(parents=True, exist_ok=True)
 
         self.get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
-        self.get_outputs(os.path.join(analysis, f"{pseudo_number}_Output", pseudo_number), new_analysis, pseudo_number)
-        self.get_convert(os.path.join(analysis, f"{pseudo_number}_Output", "Preprocessed"), new_analysis)
+
+        for file in os.listdir(analysis):
+            if "_Output" in file and pseudo_number in file:
+                modified_pseudo_number = file.replace("_Output", "")
+                if os.path.exists(os.path.join(analysis, file, modified_pseudo_number)):
+                    self.get_outputs(os.path.join(analysis, file, modified_pseudo_number), new_analysis, modified_pseudo_number)
+                elif os.path.exists(os.path.join(analysis, file, "sens")):
+                    self.get_outputs(os.path.join(analysis, file, "sens"), new_analysis, modified_pseudo_number)
+                if os.path.exists(os.path.join(analysis, file, "Preprocessed")):
+                    self.get_convert(os.path.join(analysis, file, "Preprocessed"), new_analysis)
 
         #metadata
     def get_bams(self, path, new_path, pseudo_number):
-        bam = os.path.join(path, f"{pseudo_number}.bam")
-        bam_bai = os.path.join(path, f"{pseudo_number}.bam.bai")
+        for file in os.listdir(path):
+            if pseudo_number in file and ".bam" in file:
+                shutil.copy2(os.path.join(path, file), os.path.join(new_path, file))
 
-        new_bam = os.path.join(new_path, f"{pseudo_number}.bam")
-        new_bam_bai = os.path.join(new_path, f"{pseudo_number}.bam.bai")
-
-        if os.path.exists(bam):
-            shutil.copy2(bam, new_bam)
-        if os.path.exists(bam_bai):
-            shutil.copy2(bam_bai, new_bam_bai)
-    
     def get_outputs(self, path, new_path, pseudo_number):
         parameters = os.path.join(path, f"{pseudo_number}_Parameters.txt")
         stat_info = os.path.join(path, f"{pseudo_number}_StatInfo.txt")
@@ -149,9 +151,12 @@ class RunOrganiser:
         new_stat_info = os.path.join(new_path, f"{pseudo_number}_StatInfo.txt")
         new_bamconversion = os.path.join(new_path, "bamconversion.log")
 
-        shutil.copy2(parameters, new_parameters)
-        shutil.copy2(stat_info, new_stat_info)
-        shutil.copy2(bamconversion, new_bamconversion)
+        if os.path.exists(parameters):
+            shutil.copy2(parameters, new_parameters)
+        if os.path.exists(stat_info):
+            shutil.copy2(stat_info, new_stat_info)
+        if os.path.exists(bamconversion):
+            shutil.copy2(bamconversion, new_bamconversion)
 
     def get_convert(self, path, new_path):
         for file in os.listdir(path):
@@ -161,9 +166,8 @@ class RunOrganiser:
             if file.endswith("RemoveDuplicates.log"):
                 shutil.copy2(os.path.join(path, file), os.path.join(new_path, file))
 
-    def create_patient_files(self, run_path, run_file):
+    def create_patient_files(self,  run_file):
         clinical_info_path = os.path.join(self.pseudo_run, run_file, "clinical_info.json")
-        samples_path = os.path.join(run_path, run_file, "Samples")
 
         with open(clinical_info_path) as json_file:
             data = json.load(json_file)
@@ -178,9 +182,3 @@ class RunOrganiser:
             patient_metadata_file = os.path.join(patient_folder, "patient_metadata.json")
             with open(patient_metadata_file, "w") as f:
                 json.dump(patient, f, indent=4)
-
-            #for sample in patient["samples"]:
-                #symlink_path = os.path.join(samples_path, sample["pseudo_ID"])
-                #new_destination = os.path.join(patient_folder, sample["pseudo_ID"])
-                #if not os.path.islink(new_destination):
-                    #os.symlink(f"{symlink_path}/", new_destination,  target_is_directory=True, dir_fd=1)

@@ -4,6 +4,7 @@ from miseq_sample_metadata import CollectSampleMetadata
 from import_metadata import MolgenisImporter
 import argparse
 import os
+import shutil
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -14,15 +15,25 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", type=str, required=True, help="Path to the organise file")
     parser.add_argument("-p", "--patients", type=str, required=True, help="Path to a patient folder")
     parser.add_argument("-w", "--wsi", type=str, required=True, help="Path to a WSI folder")
-    parser.add_argument("-d",  "--documents", type=str, required=True, help="Path to a libraries document")
+    parser.add_argument("-d", "--documents", type=str, required=True, help="Path to a libraries document")
     args = parser.parse_args()
 
     molgenis_login = os.environ['CATALOG-LOGIN']
     molgenis_password = os.environ['CATALOG-PASSWORD']
+    if not os.path.exists(os.path.join(args.output, "backups")):
+        os.mkdir(os.path.join(args.output, "backups"))
+    if not os.path.exists(os.path.join(args.output,"errors")):
+        os.mkdir(os.path.join(args.output,"errors"))
 
     for file in os.listdir(args.runs):
         print("Organising: ", file)
-        run_path = RunOrganiser(args.runs, file, args.output, args.patients)()
+        try:
+            run_path = RunOrganiser(args.runs, file, args.output, args.patients)()
+        except FileNotFoundError as e:
+            print(f"Run {file} is missing some data\nError:\n{e}")
+            shutil.copytree(os.path.join(args.runs, file),os.path.join(args.output,"errors",file))
+            continue
+
         print("Collecting metadata...")
         CollectRunMetadata(os.path.join(args.output, run_path))()
         catalog_info = os.path.join(args.output, run_path, "catalog_info_per_pred_number")
@@ -35,4 +46,5 @@ if __name__ == "__main__":
         importer = MolgenisImporter(os.path.join(args.output, run_path) , args.wsi, args.documents, molgenis_login, molgenis_password)
         importer()
         del importer
+        #shutil.move(os.path.join(args.runs, file), os.path.join(args.output, "backups" ,file))
     print("Done!")

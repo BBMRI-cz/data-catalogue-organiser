@@ -62,8 +62,8 @@ class Material:
         self.materialidentifier = sample["sample_ID"]
         self.collectedfromperson = patient_dict["ID"]
         self.belongstodiagnosis = f"mmci_clinical_{uuid.UUID(int=int(sample['biopsy_number'].replace('/', '').replace('-', '')))}"
-        self.samplingtimestamp = sample["cut_time"]
-        self.registrationtimestamp = sample["freeze_time"]
+        self.samplingtimestamp = sample["cut_time"] if sample["material"] == "tissue" else sample["taking_date"]
+        self.registrationtimestamp = sample["freeze_time"] if sample["material"] == "tissue" else sample["taking_date"]
         self.samplingprotocol = "NoInformation (NI, nullflavor)"
         self.samplingprotocoldeviation = "NoInformation (NI, nullflavor)"
         self.reasonforsamplingprotocoldeviation = "NoInformation (NI, nullflavor)"
@@ -81,10 +81,9 @@ class Material:
     def _look_for_wsi(self, wsi_path, biopsy_number):
         wsi_folder, biopsy_start = self._make_path_from_biopsy_number(biopsy_number)
 
-        print(wsi_folder, biopsy_start)
-        print(os.listdir(os.path.join(wsi_path, wsi_folder)))
-
-        return any(str(folder).startswith(biopsy_start) for folder in os.listdir(os.path.join(wsi_path, wsi_folder)))
+        if os.path.exists(os.path.join(wsi_path, wsi_folder)) and os.path.isdir(os.path.join(wsi_path, wsi_folder)):
+            return any(str(folder).startswith(biopsy_start) for folder in os.listdir(os.path.join(wsi_path, wsi_folder)))
+        return False
 
     def _make_path_from_biopsy_number(self, biopsy_number):
         year = biopsy_number.split("/")[0]

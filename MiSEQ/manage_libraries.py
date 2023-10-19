@@ -10,7 +10,7 @@ class LibrariesManager:
         }
 
     def __init__(self, libraries_path, sample_sheet_path, path_to_run, predictive_number):
-        all_files = [os.path.join(libraries_path, file) for file in  os.listdir(libraries_path)]
+        all_files = [os.path.join(libraries_path, file) for file in  os.listdir(libraries_path) if not os.path.isdir(file) and file.endswith(".csv")]
         latest_file = max(all_files, key=os.path.getmtime)
         self.libraries_path = latest_file
         self.sample_sheet_path = sample_sheet_path
@@ -77,7 +77,7 @@ class LibrariesManager:
                 if row["Text in parameters"] in parameter.lower():
                     return {
                                     "input_amount":row["Input Amount"],
-                                    "library_prep_kit":row["Library Preparation Kit"],
+                                    "library_prep_kit":row["code in the molgenis catalogue"],
                                     "pca_free": row["PCR Free"],
                                     "target_enrichment_kid":row["Target Enrichment Kit"],
                                     "umi_present": row["UMIs Present"],
@@ -90,7 +90,7 @@ class LibrariesManager:
                 if look_for_manual and panel_value in row["Panel"] and row["Text in parameters"] == "manual":
                         return {
                                     "input_amount":row["Input Amount"],
-                                    "library_prep_kit":row["Library Preparation Kit"],
+                                    "library_prep_kit":row["code in the molgenis catalogue"],
                                     "pca_free": row["PCR Free"],
                                     "target_enrichment_kid":row["Target Enrichment Kit"],
                                     "umi_present": row["UMIs Present"],
@@ -101,7 +101,7 @@ class LibrariesManager:
                 if not look_for_manual and panel_value in row["Panel"]:
                         return {
                                     "input_amount":row["Input Amount"],
-                                    "library_prep_kit":row["Library Preparation Kit"],
+                                    "library_prep_kit":row["code in the molgenis catalogue"],
                                     "pca_free": row["PCR Free"],
                                     "target_enrichment_kid":row["Target Enrichment Kit"],
                                     "umi_present": row["UMIs Present"],

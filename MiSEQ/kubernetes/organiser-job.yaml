@@ -13,7 +13,7 @@ spec:
             runAsNonRoot: true
             seccompProfile:
               type: RuntimeDefault
-            runAsUser: 1000
+            runAsUser: 1005
             runAsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
           containers:
@@ -36,20 +36,11 @@ spec:
                   secretKeyRef:
                     name: catalog-secret
                     key: password
-            command: ["python", "/scripts/pipeline.py", "-r", "/pseudonymized/", "-o", "/OrganisedRuns/", "-p", "/Patients/", "-w",  /wsi/, "-d", "/Libraries/"]
+            command: ["python", "/scripts/pipeline.py", "-r", "/data/PSEUDONYMIZED-MiSEQ-testing", "-o", "/data/OrganisedRuns/", "-p", "/data/Patients/", "-w",  /wsi/, "-d", "/data/Libraries/"]
             volumeMounts:
             - name: storage-catalogue-volume
-              mountPath: /pseudonymized/
-              subPath: PSEUDONYMIZED-MiSEQ-w-permit
-            - name: storage-catalogue-volume
-              mountPath: /OrganisedRuns/
-              subPath: OrganisedRuns
-            - name: storage-catalogue-volume
-              mountPath: /Patients/
-              subPath: Patients
-            - name: storage-catalogue-volume
-              mountPath: /Libraries/
-              subPath: Libraries
+              mountPath: /data/
+              subPath: MiSEQ
             - name: data-wsi-volume
               mountPath: /wsi/
               subPath: tiff
