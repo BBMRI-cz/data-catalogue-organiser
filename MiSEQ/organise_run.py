@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import shutil
 import json
+import logging
 
 class RunOrganiser:
 
@@ -24,6 +25,18 @@ class RunOrganiser:
         self.create_general_file(run_path, self.file)
         self.create_patient_files(self.file)
         return os.path.join(y, machine, run_number, self.file)
+
+    def copy_if_exists(self, orig_path, new_path):
+        if os.path.exists(orig_path):
+            shutil.copy2(orig_path, new_path)
+        else:
+            logging.warning(f"Path {orig_path} does not exist!")
+
+    def copy_folder_if_exists(self, orig_path, new_path):
+        if os.path.exists(orig_path):
+            shutil.copytree(orig_path, new_path)
+        else:
+            logging.warning(f"Path {orig_path} does not exist!")
 
     def split_file_to_parts(self, filename):
         splitted_filename = filename.split("_")
@@ -55,52 +68,54 @@ class RunOrganiser:
 
         run_parameters = os.path.join(general_file_path, "runParameters.xml")
         new_run_parameters = os.path.join(new_general_file_path, "runParameters.xml")
-        shutil.copy2(run_parameters, new_run_parameters)
+        self.copy_if_exists(run_parameters, new_run_parameters)
 
         run_info = os.path.join(general_file_path, "RunInfo.xml")
         new_run_info = os.path.join(new_general_file_path, "RunInfo.xml")
-        shutil.copy2(run_info, new_run_info)
+        self.copy_if_exists(run_info, new_run_info)
 
         completed_job = os.path.join(general_file_path, "CompletedJobInfo.xml")
         new_completed_job = os.path.join(new_general_file_path, "CompletedJobInfo.xml")
-        shutil.copy2(completed_job, new_completed_job)
+        self.copy_if_exists(completed_job, new_completed_job)
 
         generate_statistics = os.path.join(general_file_path, "GenerateFASTQRunStatistics.xml")
         new_generate_statistics = os.path.join(new_general_file_path, "GenerateFASTQRunStatistic.xml")
-        shutil.copy2(generate_statistics, new_generate_statistics)
+        self.copy_if_exists(generate_statistics, new_generate_statistics)
 
         analysis_log  = os.path.join(general_file_path, "AnalysisLog.txt")
         new_analysis_log = os.path.join(new_general_file_path, "AnalysisLog.txt")
-        shutil.copy2(analysis_log, new_analysis_log)
-
-        data_intensities_basecalls_alignments = os.path.join(general_file_path, "Data", "Intensities", "BaseCalls", "Alignment")
-        new_data_intenstisities_basecalls_alignment = os.path.join(new_general_file_path, "Data", "Intensities", "Basecalls")
-        Path(new_data_intenstisities_basecalls_alignment).mkdir(parents=True, exist_ok=True)
-        shutil.copytree(data_intensities_basecalls_alignments, os.path.join(new_data_intenstisities_basecalls_alignment, "Alignment"))
-
-        data_inter_op = os.path.join(general_file_path, "InterOp")
-        new_data_inter_op = os.path.join(new_general_file_path, "InterOp")
-        shutil.copytree(data_inter_op, new_data_inter_op)
-
-        data_logs = os.path.join(general_file_path, "Logs")
-        new_data_logs = os.path.join(new_general_file_path, "Logs")
-        shutil.copytree(data_logs, new_data_logs)
-
-        data_config = os.path.join(general_file_path, "Config")
-        new_data_config = os.path.join(new_general_file_path, "Config")
-        shutil.copytree(data_config, new_data_config)
+        self.copy_if_exists(analysis_log, new_analysis_log)
 
         sample_sheet = os.path.join(general_file_path, "SampleSheet.csv")
         new_sample_sheet = os.path.join(new_general_file_path, "SampleSheet.csv")
-        shutil.copy2(sample_sheet, new_sample_sheet)
+        self.copy_if_exists(sample_sheet, new_sample_sheet)
 
         clinical_info = os.path.join(general_file_path, "clinical_info.json")
         new_clinical_info = os.path.join(new_general_file_path, "clinical_info.json")
-        shutil.copy2(clinical_info, new_clinical_info)
+        self.copy_if_exists(clinical_info, new_clinical_info)
+
+        data_intensities_basecalls_alignments = os.path.join(general_file_path, "Data", "Intensities", "BaseCalls", "Alignment")
+        new_data_intenstisities_basecalls_alignment = os.path.join(new_general_file_path, "Data", "Intensities", "BaseCalls")
+        Path(new_data_intenstisities_basecalls_alignment).mkdir(parents=True, exist_ok=True)
+        self.copy_folder_if_exists(
+            data_intensities_basecalls_alignments,
+            new_data_intenstisities_basecalls_alignment)
+
+        data_inter_op = os.path.join(general_file_path, "InterOp")
+        new_data_inter_op = os.path.join(new_general_file_path, "InterOp")
+        self.copy_folder_if_exists(data_inter_op, new_data_inter_op)
+
+        data_logs = os.path.join(general_file_path, "Logs")
+        new_data_logs = os.path.join(new_general_file_path, "Logs")
+        self.copy_folder_if_exists(data_logs, new_data_logs)
+
+        data_config = os.path.join(general_file_path, "Config")
+        new_data_config = os.path.join(new_general_file_path, "Config")
+        self.copy_folder_if_exists(data_config, new_data_config)
 
         catalog_info_per_pac = os.path.join(general_file_path, "catalog_info_per_pred_number")
         new_catalog_info_per_pac = os.path.join(new_general_file_path, "catalog_info_per_pred_number")
-        shutil.copytree(catalog_info_per_pac, new_catalog_info_per_pac)
+        self.copy_folder_if_exists(catalog_info_per_pac, new_catalog_info_per_pac)
 
     def get_pseudo_numbers(self, sample_sheet_path):
         df = pd.read_csv(sample_sheet_path, delimiter=",", )
@@ -117,14 +132,17 @@ class RunOrganiser:
 
         for file in os.listdir(basecalls):
             if pseudo_number in file:
-                shutil.copy2(os.path.join(basecalls, file), os.path.join(new_fastq_folder, file))
+                self.copy_if_exists(os.path.join(basecalls, file), os.path.join(new_fastq_folder, file))
 
         #analysis
         analysis = os.path.join(self.pseudo_run, filename, "Analysis")
         new_analysis = os.path.join(new_folder, "Analysis", "Reports")
         Path(new_analysis).mkdir(parents=True, exist_ok=True)
 
-        self.get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
+        if os.path.exists(os.path.join(analysis, "BAM")):
+            self.get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
+        else:
+            logging.warning(f"Path {os.path.join(analysis, 'BAM')} does not exist!")
 
         for file in os.listdir(analysis):
             if "_Output" in file and pseudo_number in file:
@@ -151,12 +169,9 @@ class RunOrganiser:
         new_stat_info = os.path.join(new_path, f"{pseudo_number}_StatInfo.txt")
         new_bamconversion = os.path.join(new_path, "bamconversion.log")
 
-        if os.path.exists(parameters):
-            shutil.copy2(parameters, new_parameters)
-        if os.path.exists(stat_info):
-            shutil.copy2(stat_info, new_stat_info)
-        if os.path.exists(bamconversion):
-            shutil.copy2(bamconversion, new_bamconversion)
+        self.copy_if_exists(parameters, new_parameters)
+        self.copy_if_exists(stat_info, new_stat_info)
+        self.copy_if_exists(bamconversion, new_bamconversion)
 
     def get_convert(self, path, new_path):
         for file in os.listdir(path):

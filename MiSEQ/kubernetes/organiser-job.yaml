@@ -36,7 +36,7 @@ spec:
                   secretKeyRef:
                     name: catalog-secret
                     key: password
-            command: ["python", "/scripts/pipeline.py", "-r", "/data/PSEUDONYMIZED-MiSEQ-testing", "-o", "/data/OrganisedRuns/", "-p", "/data/Patients/", "-w",  /wsi/, "-d", "/data/Libraries/"]
+            command: ["python", "/scripts/pipeline.py", "-r", "/data/PSEUDONYMIZED-MiSEQ", "-o", "/data/OrganisedRuns/", "-p", "/data/Patients/", "-w",  /wsi/, "-d", "/data/Libraries/"]
             volumeMounts:
             - name: storage-catalogue-volume
               mountPath: /data/

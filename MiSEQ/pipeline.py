@@ -5,6 +5,7 @@ from import_metadata import MolgenisImporter
 import argparse
 import os
 import shutil
+import logging
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -18,6 +19,8 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--documents", type=str, required=True, help="Path to a libraries document")
     args = parser.parse_args()
 
+    logging.basicConfig(filename=os.path.join(args.output,"logs", ""), encoding='utf-8', level=logging.INFO)
+
     molgenis_login = os.environ['CATALOG-LOGIN']
     molgenis_password = os.environ['CATALOG-PASSWORD']
     if not os.path.exists(os.path.join(args.output, "backups")):
@@ -26,15 +29,15 @@ if __name__ == "__main__":
         os.mkdir(os.path.join(args.output,"errors"))
 
     for file in os.listdir(args.runs):
-        print("Organising: ", file)
+        logging.info("Organising: ", file)
         try:
             run_path = RunOrganiser(args.runs, file, args.output, args.patients)()
         except FileNotFoundError as e:
-            print(f"Run {file} is missing some data\nError:\n{e}")
-            shutil.copytree(os.path.join(args.runs, file),os.path.join(args.output,"errors",file))
+            logging.error(f"Run {file} is missing some data\nError:\n{e}")
+            shutil.move(os.path.join(args.runs, file),os.path.join(args.output,"errors",file))
             continue
 
-        print("Collecting metadata...")
+        logging.info("Collecting metadata...")
         CollectRunMetadata(os.path.join(args.output, run_path))()
         catalog_info = os.path.join(args.output, run_path, "catalog_info_per_pred_number")
         for sample in os.listdir(catalog_info):
@@ -42,9 +45,11 @@ if __name__ == "__main__":
             sample_stat_info = os.path.join(os.path.join(args.output, run_path), "Samples", sample, "Analysis", "Reports", f"{sample}_StatInfo.txt")
             CollectSampleMetadata(os.path.join(args.output, run_path), sample_stat_info, catalog_info)()
 
-        print("Importing metadata to molgenis...")
-        importer = MolgenisImporter(os.path.join(args.output, run_path) , args.wsi, args.documents, molgenis_login, molgenis_password)
-        importer()
-        del importer
-        #shutil.move(os.path.join(args.runs, file), os.path.join(args.output, "backups" ,file))
+        logging.info("Importing metadata to molgenis...")
+        #importer = MolgenisImporter(os.path.join(args.output, run_path) , args.wsi, args.documents, molgenis_login, molgenis_password)
+        #importer()
+        #del importer
+
+        shutil.move(os.path.join(args.runs, file), os.path.join(args.output, "backups" ,file))
+
     print("Done!")
