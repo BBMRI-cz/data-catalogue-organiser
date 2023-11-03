@@ -18,7 +18,6 @@ class Personal:
         self.inclusionstatus = "Not available (NAVU, nullflavor)"
         self.primaryaffiliatedinstitute = "Masaryk Memorial Cancer Institute"
         self.resourcesinotherinstitutes = ["Not available (NAVU, nullflavor)"]
-        self.participatesinstudy= None
 
 class Clinical:
     def __init__(self, patient_dict):
@@ -30,19 +29,13 @@ class Clinical:
         self.phenotypicdataavailable = ["NoInformation (NI, nullflavor)"]
         self.clinicaldiagnosis = self._adjust_diagnosis(sample["diagnosis"]) if sample["material"] != "genome" else None
         self.moleculardiagnosisgene = ["NoInformation (NI, nullflavor)"]
-        self.moleculardiagnosisother = None
         self.ageatdiagnosis = self._calculate_age_at_diagnosis(patient_dict["birth"].split("/")[1], sample)
         self.ageatlastscreening = self._calculate_age_at_diagnosis(patient_dict["birth"].split("/")[1], sample)
         self.medication = ["NoInformation (NI, nullflavor)"]
         self.drugregimen = None
         self.familymembersaffected = ["NoInformation (NI, nullflavor)"]
         self.familymemberssequenced = ["NoInformation (NI, nullflavor)"]
-        self.consanguinity = None
         self.medicalhistory = ["NoInformation (NI, nullflavor)"]
-        self.ageofonset = self._calculate_age_at_diagnosis(patient_dict["birth"].split("/")[1], sample)
-        self.firstcontact = None
-        self.functioning = None
-        self.materialusedindiagnosis = None
 
     def _calculate_age_at_diagnosis(self, birth, sample):
         if sample["material"] == "tissue":
@@ -71,11 +64,9 @@ class Material:
         self.anatomicalsource = "NoInformation (NI, nullflavor)"
         self.pathologicalstate = sample_dict["pathoState"]
         self.storageconditions = sample_dict["storCond"]
-        self.expirationdate = None
         self.percentagetumourcells = None
         self.physicallocation = "MMCI Biobank"
-        self.derivedfrom = "NoInformation (NI, nullflavor)"
-        self.wholeslideimagesavailability = self._look_for_wsi(wsi_path, sample["biopsy_number"]) #TODO
+        self.wholeslideimagesavailability = self._look_for_wsi(wsi_path, sample["biopsy_number"])
         self.radiotherapyimagesavailability	= False
 
     def _look_for_wsi(self, wsi_path, biopsy_number):
@@ -101,14 +92,14 @@ class SamplePreparation:
         lib_data = LibrariesManager(libraries_path, sample_sheet, run_path, sample["pseudo_ID"]).get_data_from_libraries()
         
         if lib_data:
-            self.inputamount= lib_data["input_amount"]  #"10-25ngr"
-            self.librarypreparationkit= lib_data["library_prep_kit"]  #"KAPA HyperPlus Kits by Roche"
+            self.inputamount= lib_data["input_amount"]
+            self.librarypreparationkit= lib_data["library_prep_kit"]
             self.pcrfree= lib_data["pca_free"]
-            self.targetenrichmentkit=  lib_data["target_enrichment_kid"] #"KAPA HyperPlus Kits by Roche"
-            self.umispresent= lib_data["umi_present"] #"false"
-            self.intendedinsertsize= lib_data["intended_insert_size"] #"265"
-            self.intendedreadlength= lib_data["intended_read_length"] #"150"
-            self.genes = lib_data["genes"] #'ALK, APC, ARAF, BRAF, CH1, NRAS, PDGFRA, PIK3CA, PTEN, STK11, TP53*'
+            self.targetenrichmentkit=  lib_data["target_enrichment_kid"]
+            self.umispresent= lib_data["umi_present"]
+            self.intendedinsertsize= lib_data["intended_insert_size"]
+            self.intendedreadlength= lib_data["intended_read_length"]
+            self.genes = lib_data["genes"]
 
 class Sequencing:
     def __init__(self, patient_dict, sample_dict, run_metadata_dict):
@@ -121,9 +112,7 @@ class Sequencing:
         self.sequencingmethod = run_metadata_dict["seqMethod"]
         self.averagereaddepth = sample_dict["avReadDepth"]
         self.observedreadlength = sample_dict["obsReadLength"]
-        self.observedinsertsize = None
         self.percentageq30 = run_metadata_dict["percentageQ30"].replace("%", "")
-        self.percentagetr20 = None
         self.otherqualitymetrics = f"ClusterPF: {run_metadata_dict['clusterPF']}, numLanes: {run_metadata_dict['numLanes']}, flowcellID: {run_metadata_dict['flowcellID']}"
 
 class Analysis:
@@ -134,13 +123,22 @@ class Analysis:
         self.physicaldatalocation = "Masaryk Memorial Cancer Istitute"
         self.abstractdatalocation = "Sensitive Cloud Institute of Computer Science"
         self.dataformatsstored = ["BAM", "VCF"]
-        self.algorithmsused = "NextGENe"
         self.referencegenomeused = "NoInformation (NI, nullflavor)"
-        self.bioinformaticprotocolused = None
-        self.bioinformaticprotocoldeviation = None
-        self.reasonforbioinformaticprotocoldeviation = None
-        self.wgsguidelinefollowed = None
+        self.bioinformaticprotocolused = "NextGENe"
 
+class IndividualConsent:
+    def __init__(self, patient_dict):
+        self.individualconsentidentifier = patient_dict["ID"].replace("patient", "consent")
+        self.personconsenting = patient_dict["ID"]
+        self.consentformused = "mmci_consentform_"
+        self.collectedby= "Masaryk Memorial Cancer Instutite"
+        self.signingdate = ""
+        self.validfrom = ""
+        self.validuntil = ""
+        self.representedby = "patient"
+        self.datausepermissions = "general research use"
+        self.datatausespecification = ""
+        self.allowrecontacting = ""
 
 class MolgenisImporter:
 

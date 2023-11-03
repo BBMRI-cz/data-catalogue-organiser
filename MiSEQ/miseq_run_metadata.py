@@ -36,9 +36,6 @@ class CollectRunMetadata:
         run_data = self._find_run_metadata(xml_runParameters, xml_GenerateFASTQRunStatistics, xml_runInfo, txt_analysisLog)
         run_metadata = os.path.join(self.run_path, "run_metadata.json")
 
-        if not (os.path.exists(os.path.join(self.run_path, "run_metadata.json"))):
-            return False
-
         with open(run_metadata, 'w') as outfile:
             json.dump(run_data, outfile, indent=4)
 

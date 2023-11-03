@@ -99,7 +99,7 @@ class RunOrganiser:
         Path(new_data_intenstisities_basecalls_alignment).mkdir(parents=True, exist_ok=True)
         self.copy_folder_if_exists(
             data_intensities_basecalls_alignments,
-            new_data_intenstisities_basecalls_alignment)
+            os.path.join(new_data_intenstisities_basecalls_alignment, "Alignment"))
 
         data_inter_op = os.path.join(general_file_path, "InterOp")
         new_data_inter_op = os.path.join(new_general_file_path, "InterOp")
