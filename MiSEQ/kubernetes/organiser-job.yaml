@@ -18,7 +18,7 @@ spec:
             fsGroupChangePolicy: "OnRootMismatch"
           containers:
           - name: organise-sequencing
-            image: tomashoufek/data-catalogue-organiser:1.0.1
+            image: tomashoufek/data-catalogue-organiser:1.2.1
             imagePullPolicy: Always
             securityContext:
               allowPrivilegeEscalation: false
@@ -36,6 +36,11 @@ spec:
                   secretKeyRef:
                     name: catalog-secret
                     key: password
+              - name: HTTPS_PROXY
+                valueFrom:
+                  secretKeyRef:
+                    name: catalog-secret
+                    key: httpsproxy
             command: ["python", "/scripts/pipeline.py", "-r", "/data/PSEUDONYMIZED-MiSEQ", "-o", "/data/OrganisedRuns/", "-p", "/data/Patients/", "-w",  /wsi/, "-d", "/data/Libraries/"]
             volumeMounts:
             - name: storage-catalogue-volume

@@ -28,6 +28,7 @@ if __name__ == "__main__":
 
     molgenis_login = os.environ['CATALOG-LOGIN']
     molgenis_password = os.environ['CATALOG-PASSWORD']
+    logging.info(os.environ["HTTPS_PROXY"])
     if not os.path.exists(os.path.join(args.output, "backups")):
         os.mkdir(os.path.join(args.output, "backups"))
     if not os.path.exists(os.path.join(args.output,"errors")):
@@ -54,9 +55,9 @@ if __name__ == "__main__":
  
         if upload_to_catalog:
             logging.info("Uploading data to catalog...")
-            #importer = MolgenisImporter(os.path.join(args.output, run_path) , args.wsi, args.documents, molgenis_login, molgenis_password)
-            #importer()
-            #del importer
+            importer = MolgenisImporter(os.path.join(args.output, run_path) , args.wsi, args.documents, molgenis_login, molgenis_password)
+            importer()
+            del importer
         else:
             logging.warning("Some files are missing, no data uploaded to catalog!")
 
