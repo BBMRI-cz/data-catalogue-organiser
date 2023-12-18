@@ -6,21 +6,16 @@ import os
 class SampleInfoMMCI:
 
     def __init__(self):
-        self.idSample: str = ''          #clinical_info.json (pseudoID: "mmci_predictive_44d8480d-d2d4-44f9-aefe-7ace74329f7a")
-        self.collFromPerson: str = '' #clinical_info.json (ID:mmci_patient_a8236c65-51c1-4626-b866-fbf9a79ca176
-        self.belToDiag: str = '' #clinical_info.json (ID:mmci_patient_a8236c65-51c1-4626-b866-fbf9a79ca176
-        self.bioSpeciType: str = '' #clinical_info.json - material
-        self.pathoState: str = '' #clinical_info.json - chosen according to MaterialType (pr. 53 - nádor, 54 - norma, 55 - meta)
-        self.storCond: str = ''  # clinical_info.json - chosen according to MaterialType
-        self.wsiAvailability: bool = False #according to biopsy number
-        self.radioDataAvailability: bool = False #according to accession number in export
-        self.avReadDepth: str = ''  # [predictive number]_StatInfo.txt
-        self.obsReadLength: str = ''  # [predictive number]_StatInfo.txt
-
-        # TODO
-        # self.percTumCell: str = '' #pravdepodobne bude v BAM súboroch z analýzy, tie ale neviem otvoriť - malo by to ísť pomocou knižnice pysam, subrpocess alebo samtools
-        # self.obsInsSize: int = 0 #pravdepodobne bude v BAM súboroch z analýzy, tie ale neviem otvoriť - malo by to ísť pomocou knižnice pysam, subrpocess alebo samtools
-        # self.physLoc: str = '' #
+        self.idSample: str = ''
+        self.collFromPerson: str = ''
+        self.belToDiag: str = ''
+        self.bioSpeciType: str = ''
+        self.pathoState: str = ''
+        self.storCond: str = ''
+        self.wsiAvailability: bool = False
+        self.radioDataAvailability: bool = False
+        self.avReadDepth: str = ''
+        self.obsReadLength: str = ''
 
 class CollectSampleMetadata:
 
