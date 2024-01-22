@@ -35,6 +35,7 @@ class CollectSampleMetadata:
 
     def _find_sample_metadata(self, sample_id):
         self._find_data_in_statinfo(self.sample_path)
+        self._find_data_in_CCRS(self.sample_path)
         self._find_data_in_clinical_info(self.clinical_data_path, sample_id)
         jsonStr = self.sample_info.__dict__
         return jsonStr
@@ -45,9 +46,14 @@ class CollectSampleMetadata:
                 match1 = re.search(r'Average Read Length: ([\d]+)', line)
                 if match1:
                     self.sample_info.obsReadLength = match1.group(1)
-                match2 = re.search(r'Average Coverage: ([\d]+)', line)
-                if match2:
-                    self.sample_info.avReadDepth = match2.group(1)
+
+
+    def _find_data_in_CCRS(self, txt_CCRS):
+        with open(txt_CCRS, 'r', encoding='utf-8', errors="ignore") as f:
+            for line in f:
+                match = re.search(r'Average Coverage\s+([\d.,]+)', line)
+                if match:
+                    self.sample_info.avReadDepth = match1.group(1)
 
     def _find_data_in_clinical_info(self, json_clinical_data, sample_id):
         if os.path.exists(os.path.join(json_clinical_data, f"{sample_id}.json")):
