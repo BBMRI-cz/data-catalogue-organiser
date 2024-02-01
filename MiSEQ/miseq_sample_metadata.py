@@ -35,7 +35,7 @@ class CollectSampleMetadata:
 
     def _find_sample_metadata(self, sample_id):
         self._find_data_in_statinfo(self.sample_path)
-        self._find_data_in_CCRS(self.sample_path)
+        self._find_data_in_CCRS(self.sample_path.replace("_StatInfo.txt", "_Coverage_Curve_Report1_Statistics.txt"))
         self._find_data_in_clinical_info(self.clinical_data_path, sample_id)
         jsonStr = self.sample_info.__dict__
         return jsonStr
@@ -43,17 +43,16 @@ class CollectSampleMetadata:
     def _find_data_in_statinfo(self, txt_statInfo):
         with open(txt_statInfo, 'r', encoding='utf-8', errors="ignore") as f:
             for line in f:
-                match1 = re.search(r'Average Read Length: ([\d]+)', line)
-                if match1:
-                    self.sample_info.obsReadLength = match1.group(1)
-
+                avr_read_len_match = re.search(r'Average Read Length: ([\d]+)', line)
+                if avr_read_len_match:
+                    self.sample_info.obsReadLength = avr_read_len_match.group(1)
 
     def _find_data_in_CCRS(self, txt_CCRS):
         with open(txt_CCRS, 'r', encoding='utf-8', errors="ignore") as f:
             for line in f:
-                match = re.search(r'Average Coverage\s+([\d.,]+)', line)
-                if match:
-                    self.sample_info.avReadDepth = match1.group(1)
+                avr_coverage_match = re.search(r'Average Coverage\s+([\d.,]+)', line)
+                if avr_coverage_match:
+                    self.sample_info.avReadDepth = avr_coverage_match.group(1)
 
     def _find_data_in_clinical_info(self, json_clinical_data, sample_id):
         if os.path.exists(os.path.join(json_clinical_data, f"{sample_id}.json")):
