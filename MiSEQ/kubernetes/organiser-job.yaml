@@ -26,12 +26,12 @@ spec:
                 drop:
                 - ALL
             env:
-              - name: CATALOG-LOGIN
+              - name: CATALOG_LOGIN
                 valueFrom:
                   secretKeyRef:
                     name: catalog-secret
                     key: username
-              - name: CATALOG-PASSWORD
+              - name: CATALOG_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: catalog-secret

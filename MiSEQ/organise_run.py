@@ -101,18 +101,6 @@ class RunOrganiser:
             data_intensities_basecalls_alignments,
             os.path.join(new_data_intenstisities_basecalls_alignment, "Alignment"))
 
-        data_inter_op = os.path.join(general_file_path, "InterOp")
-        new_data_inter_op = os.path.join(new_general_file_path, "InterOp")
-        self._copy_folder_if_exists(data_inter_op, new_data_inter_op)
-
-        data_logs = os.path.join(general_file_path, "Logs")
-        new_data_logs = os.path.join(new_general_file_path, "Logs")
-        self._copy_folder_if_exists(data_logs, new_data_logs)
-
-        data_config = os.path.join(general_file_path, "Config")
-        new_data_config = os.path.join(new_general_file_path, "Config")
-        self._copy_folder_if_exists(data_config, new_data_config)
-
         catalog_info_per_pac = os.path.join(general_file_path, "catalog_info_per_pred_number")
         new_catalog_info_per_pac = os.path.join(new_general_file_path, "catalog_info_per_pred_number")
         self._copy_folder_if_exists(catalog_info_per_pac, new_catalog_info_per_pac)
@@ -163,14 +151,17 @@ class RunOrganiser:
     def _get_outputs(self, path, new_path, pseudo_number):
         parameters = os.path.join(path, f"{pseudo_number}_Parameters.txt")
         stat_info = os.path.join(path, f"{pseudo_number}_StatInfo.txt")
+        coverage_curve_report_statistics = os.path.join(path,  "Reports", f"{pseudo_number}_Coverage_Curve_Report1_Statistics.txt")
         bamconversion = os.path.join(path, "bamconversion.log")
 
         new_parameters = os.path.join(new_path, f"{pseudo_number}_Parameters.txt")
         new_stat_info = os.path.join(new_path, f"{pseudo_number}_StatInfo.txt")
+        new_coverage_curve_report_statistics = os.path.join(new_path, f"{pseudo_number}_Coverage_Curve_Report1_Statistics.txt")
         new_bamconversion = os.path.join(new_path, "bamconversion.log")
 
         self._copy_if_exists(parameters, new_parameters)
         self._copy_if_exists(stat_info, new_stat_info)
+        self._copy_if_exists(coverage_curve_report_statistics, new_coverage_curve_report_statistics)
         self._copy_if_exists(bamconversion, new_bamconversion)
 
     def _get_convert(self, path, new_path):

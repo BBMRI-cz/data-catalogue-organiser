@@ -26,8 +26,8 @@ if __name__ == "__main__":
     logging.basicConfig(filename=os.path.join(args.output,"logs", datetime.now().strftime('%d_%m_%Y-%H_%M.log')), 
                         encoding='utf-8', level=logging.INFO)
 
-    molgenis_login = os.environ['CATALOG-LOGIN']
-    molgenis_password = os.environ['CATALOG-PASSWORD']
+    molgenis_login = os.environ['CATALOG_LOGIN']
+    molgenis_password = os.environ['CATALOG_PASSWORD']
     logging.info(os.environ["HTTPS_PROXY"])
     if not os.path.exists(os.path.join(args.output, "backups")):
         os.mkdir(os.path.join(args.output, "backups"))
@@ -51,7 +51,6 @@ if __name__ == "__main__":
             sample = sample.replace(".json", "")
             sample_stat_info = os.path.join(os.path.join(args.output, run_path), "Samples", sample, "Analysis", "Reports", f"{sample}_StatInfo.txt")
             CollectSampleMetadata(os.path.join(args.output, run_path), sample_stat_info, catalog_info)()
-
  
         if upload_to_catalog:
             logging.info("Uploading data to catalog...")

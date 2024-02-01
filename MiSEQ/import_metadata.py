@@ -122,7 +122,7 @@ class Sequencing:
         self.MedianReadDepth = sample_dict["avReadDepth"]
         self.ObservedReadLength = sample_dict["obsReadLength"]
         self.PercentageQ30 = run_metadata_dict["percentageQ30"].replace("%", "")
-        self.OtherQualityMetrics = f"ClusterPF: {run_metadata_dict['clusterPF']}, numLanes: {run_metadata_dict['numLanes']}, flowcellID: {run_metadata_dict['flowcellID']}"
+        self.OtherQualityMetrics = f"ClusterPF: {run_metadata_dict['clusterPF']}"
 
 class Analysis:
     def __init__(self, patient_dict):
