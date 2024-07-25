@@ -1,7 +1,7 @@
-from organise_run import RunOrganiser
-from miseq_run_metadata import CollectRunMetadata
-from miseq_sample_metadata import CollectSampleMetadata
-from import_metadata import MolgenisImporter
+from organiser.organise_run import RunOrganiser
+from organiser.metadata_managers.miseq_run_metadata import CollectRunMetadata
+from organiser.metadata_managers.miseq_sample_metadata import CollectSampleMetadata
+from organiser.import_metadata import MolgenisImporter
 import argparse
 import os
 import shutil
@@ -46,6 +46,7 @@ if __name__ == "__main__":
 
         logging.info("Collecting metadata...")
         upload_to_catalog = CollectRunMetadata(os.path.join(args.output, run_path))()
+        
         catalog_info = os.path.join(args.output, run_path, "catalog_info_per_pred_number")
         for sample in os.listdir(catalog_info):
             sample = sample.replace(".json", "")
