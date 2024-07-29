@@ -23,7 +23,7 @@ if __name__ == "__main__":
     if not os.path.exists(os.path.join(args.output, "logs")):
         os.mkdir(os.path.join(args.output, "logs"))
 
-    logging.basicConfig(filename=os.path.join(args.output,"logs", datetime.now().strftime('%d_%m_%Y-%H_%M.log')), 
+    logging.basicConfig(filename=os.path.join(args.output, "logs", datetime.now().strftime('%d_%m_%Y-%H_%M.log')),
                         encoding='utf-8', level=logging.INFO)
 
     molgenis_login = os.environ['CATALOG_LOGIN']
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     logging.info(os.environ["HTTPS_PROXY"])
     if not os.path.exists(os.path.join(args.output, "backups")):
         os.mkdir(os.path.join(args.output, "backups"))
-    if not os.path.exists(os.path.join(args.output,"errors")):
-        os.mkdir(os.path.join(args.output,"errors"))
+    if not os.path.exists(os.path.join(args.output, "errors")):
+        os.mkdir(os.path.join(args.output, "errors"))
 
     for file in os.listdir(args.runs):
         upload_to_catalog = True
@@ -41,7 +41,7 @@ if __name__ == "__main__":
             run_path = RunOrganiser(args.runs, file, args.output, args.patients)()
         except FileNotFoundError as e:
             logging.error(f"Run {file} is missing some data\nError:\n{e}")
-            shutil.move(os.path.join(args.runs, file),os.path.join(args.output,"errors",file))
+            shutil.move(os.path.join(args.runs, file), os.path.join(args.output, "errors", file))
             continue
 
         logging.info("Collecting metadata...")

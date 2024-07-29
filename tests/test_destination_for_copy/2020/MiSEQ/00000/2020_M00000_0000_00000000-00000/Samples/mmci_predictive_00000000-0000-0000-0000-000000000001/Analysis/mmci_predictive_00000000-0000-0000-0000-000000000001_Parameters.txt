@@ -1,0 +1,58 @@
+SoftGenetics NextGENe V2.4.2.2
+leden/01/2015
+
+[GENERAL]
+User:
+Instrument Type: Illumina
+Application Type: SNP/Indel Discovery
+
+Steps:
+Do Condensation: FALSE
+Do Assembly: FALSE
+Do Alignment: TRUE
+
+[Sequence Alignment]
+Whole Gene Project: TRUE
+Directory of Index:F:\Fake
+Do WGA With Paired Index: FALSE
+Reads:Allowable Mismatched Bases 1
+Allowable Ambiguous Alignments 50
+Seed: 21 Bases, Move Step: 5 Bases
+Allowable Alignments 100
+Overall: Matching Base Percentage >= 90,0
+Detect Large Indels:TRUE
+Sequence Range Checked: FALSE
+Hide Unmatched Ends: TRUE
+Except for Homozygous:TRUE
+Mutation Filter Use Original:FALSE
+Variation Mutation Percentage <= 3,00
+Variation SNP Allele <= 9 Counts
+Variation Total Coverage <= 300
+Indels Mutation Percentage <= 3,00
+Indels SNP Allele <= 9 Counts
+Indels Total Coverage <= 300
+HomoIndels Mutation Percentage <= 3,00
+HomoIndels SNP Allele <= 9 Counts
+HomoIndels Total Coverage <= 300
+Perform in-read phasing:TRUE
+Max gap between two variants 1 (0-3)
+Phaseable reads percentage >= 50,00
+Max Phase alleles count:3
+Load Assembled Result Files: FALSE
+Load Sage Data:FALSE
+Load Paired Reads:TRUE
+	Min Pair End Gap:100
+	Max Pair End Gap:1000
+Save Matched Reads:FALSE
+Highlight Anchor Sequence:FALSE
+Ambiguous Gain/Loss:TRUE
+Detect Structure Variations:FALSE
+Check Mismatch Base Number: TRUE 50 Bases
+Check Mismatch Ratio: TRUE 0,300 Length
+
+[Reports]
+AutoPostRptSaveAsPDF=0
+MutationReport
+F:\FAKE\FAKE\FAKE\FAKE\FAKE\FAKE\Accel_Custom\Accel_custom_merged_Mutation_Report.ini[Tracks]F:\FAKE\FAKE\FAKE\FAKE\FAKE\FAKE\Accel_Custom\VariantTrackSettings-TST.ini
+CoverageCurveReport
+F:\FAKE\FAKE\FAKE\FAKE\FAKE\FAKE\Accel_Custom\Accel_custom_merged_coverage_300x.ini

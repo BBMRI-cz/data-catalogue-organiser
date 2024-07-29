@@ -1,0 +1,62 @@
+SoftGenetics NextGENe V2.4.2.2
+
+
+User: 
+
+
+srpen/31/2017
+
+
+Auto Run JobID: 
+
+
+Instrument Type: Illumina
+Application Type: SNP/Indel Discovery
+Do Condensation: FALSE
+Do Assembly: FALSE
+Do Alignment: TRUE
+
+
+
+[Sample File(s)]:
+E:\Accel\Accel_210420\mmci_predictive_1c197bec-2d63-4c38-ab71-2e1e9deb037f_Output\Preprocessed\mmci_predictive_1c197bec-2d63-4c38-ab71-2e1e9deb037f_S24_L001_R1_001_converted.fasta
+E:\Accel\Accel_210420\mmci_predictive_1c197bec-2d63-4c38-ab71-2e1e9deb037f_Output\Preprocessed\mmci_predictive_1c197bec-2d63-4c38-ab71-2e1e9deb037f_S24_L001_R2_001_converted.fasta
+[Reference File(s)]:
+E:\SoftGenetics\NextGene\References\Human_v37p10_dbsnp135
+[Output]:
+E:\Accel\Accel_210420\mmci_predictive_1c197bec-2d63-4c38-ab71-2e1e9deb037f_Output\mmci_predictive_1c197bec-2d63-4c38-ab71-2e1e9deb037f
+[Set ROI Regions from GBK File]:
+FALSE
+
+
+
+[pond�l�, duben 26, 2021, 08:07:43] Whole Genome Alignment (Detect Large Indels) begins ...
+[pond�l�, duben 26, 2021, 08:07:44] Load Index ...
+[pond�l�, duben 26, 2021, 08:08:05] Load Reference ...
+[pond�l�, duben 26, 2021, 08:08:05] Load & Process Sample Files ...
+[pond�l�, duben 26, 2021, 08:08:05] Do Paired Reads Whole Genome Alignment
+[pond�l�, duben 26, 2021, 08:08:35] Do Statistics & Detect Mutations ...
+[pond�l�, duben 26, 2021, 08:09:50] Whole Genome Alignment Complete.
+
+[Alignment Statistics]
+Matched Reads: 527568
+Aligned Reads: 527568
+Perfect Reads: 404463
+Unmatched Reads: 481853
+Short Reads: 0
+Matched Bases: 68600827
+Substitutions Called: 51094
+Substitutions Uncalled: 99709
+Deletions Called: 1332
+Deletions Uncalled: 5975
+Insertions Called: 600
+Insertions Uncalled: 1919
+Average Read Length: 130
+Average Coverage: 1962
+Reference Length: 2938626560
+Covered Bases: 35034
+
+
+[pond�l�, duben 26, 2021, 08:10:12] Converting project to BAM file...
+[pond�l�, duben 26, 2021, 08:10:28] Launching NextGENe Viewer to do post processing.
+[pond�l�, duben 26, 2021, 08:11:59] Processing Complete.

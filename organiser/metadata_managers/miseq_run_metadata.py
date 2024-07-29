@@ -9,11 +9,11 @@ class RunInfoMMCI:
     def __init__(self):
         self.idMMCI: int = 0            #XML_RunParameters
         self.seqDate: str = ''          #XML_RunParameters
-        self.seqPlatform: str = ''      #always "Illumina platform"
-        self.seqModel: str = ''         #MiSeq
-        self.seqMethod: str = ''        #always "Illumina Sequencing"
-        self.percentageQ30: int = ''    #AnalysisLog.txt
-        self.percentageTR20: str = ''   #this number is not relevant for MMCI
+        self.seqPlatform: str = "Illumina platform"    
+        self.seqModel: str = "MiSeq"
+        self.seqMethod: str = "Illumina Sequencing"
+        self.percentageQ30: str = ''    #AnalysisLog.txt
+        self.percentageTR20: str = 'NA' #this number is not relevant for MMCI
         self.clusterPF: int = 0         #GemerateFASTQRunStatistics
         self.numLanes: int = 0          #XML_RunParameters
         self.flowcellID: str = ''       #XML_RunInfo
@@ -26,7 +26,7 @@ class CollectRunMetadata:
 
     def __call__(self):
         xml_runParameters = os.path.join(self.run_path, "runParameters.xml")
-        xml_GenerateFASTQRunStatistics = os.path.join(self.run_path, "GenerateFASTQRunStatistic.xml")
+        xml_GenerateFASTQRunStatistics = os.path.join(self.run_path, "GenerateFASTQRunStatistics.xml")
         xml_runInfo = os.path.join(self.run_path, "RunInfo.xml")
         txt_analysisLog = os.path.join(self.run_path, "AnalysisLog.txt")
 
@@ -62,11 +62,8 @@ class CollectRunMetadata:
             d = date(year, month, day)
             isoformat = d.isoformat()
             run.seqDate = isoformat
-            run.seqPlatform = "Illumina platform"
-            run.seqMethod = "Illumina Sequencing"
-            run.seqModel = "MiSeq"
         for element in run_params_tree.iter("Setup"):
-            run.numLanes = element.find("NumLanes").text
+            run.numLanes = int(element.find("NumLanes").text)
         return run
 
     def _find_data_in_generateFASTQrunstatistics(self, generate_FQ_stats_tree, run):

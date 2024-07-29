@@ -34,7 +34,7 @@ class CollectSampleMetadata:
 
     def _find_sample_metadata(self, sample_id):
         self._find_data_in_statinfo(self.sample_path)
-        self._find_data_in_CCRS(self.sample_path.replace("_StatInfo.txt", "_Coverage_Curve_Report1_Statistics.txt"))
+        self._find_data_in_CCRS(os.path.join(self.run_path, "Analysis" ,f"{sample_id}_Output", sample_id, "Reports", f"{sample_id}_Coverage_Curve_Report1_Statistics.txt"))
         self._find_data_in_clinical_info(self.clinical_data_path, sample_id)
         jsonStr = self.sample_info.__dict__
         return jsonStr

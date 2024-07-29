@@ -1,0 +1,37 @@
+{
+    "ID": "mmci_patient_00000000-0000-0000-0000-000000000001",
+    "birth": "1/1/2000",
+    "sex": 1,
+    "samples": [
+        {
+            "pseudo_ID": "mmci_predictive_00000000-0000-0000-0000-000000000001",
+            "biopsy_number": "2020/0000-1",
+            "sample_ID": "mmci_sample_00000000-0000-0000-0000-000000000001",
+            "sample_number": 3,
+            "available_samples_number": 3,
+            "material_type": "2",
+            "material": "Tissue",
+            "pTNM": "TNM",
+            "morphology": "8720/69",
+            "diagnosis": "C774",
+            "cut_time": "<built-in method date of datetime.datetime object at 0x7f6bb4f21350> <built-in method time of datetime.datetime object at 0x7f6bb4f21350>",
+            "freeze_time": "<built-in method date of datetime.datetime object at 0x7f6bb4f20a50> <built-in method time of datetime.datetime object at 0x7f6bb4f20a50>",
+            "retrieved": "RetrievalType.operational"
+        },
+        {
+            "pseudo_ID": "mmci_predictive_00000000-0000-0000-0000-000000000001",
+            "biopsy_number": "2021/2476-1",
+            "sample_ID": "mmci_sample_00000000-0000-0000-0000-000000000002",
+            "sample_number": 3,
+            "available_samples_number": 3,
+            "material_type": "4",
+            "material": "Tissue",
+            "pTNM": "TNM",
+            "morphology": "8720/69",
+            "diagnosis": "C774",
+            "cut_time": "<built-in method date of datetime.datetime object at 0x7f6bb4f210b0> <built-in method time of datetime.datetime object at 0x7f6bb4f210b0>",
+            "freeze_time": "<built-in method date of datetime.datetime object at 0x7f6bb4f20d80> <built-in method time of datetime.datetime object at 0x7f6bb4f20d80>",
+            "retrieved": "RetrievalType.operational"
+        }
+    ]
+}

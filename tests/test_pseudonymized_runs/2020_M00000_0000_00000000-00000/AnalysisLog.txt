@@ -1,0 +1,106 @@
+01/01/2020,00:00:00.000,MiSeq Reporter 2.6.2.3: Starting Logging for 000000_M00000_0000_000000000-00000
+01/01/2020,00:00:00.000,System HWI-M02340R with 4 cores and 15.9 GB of RAM
+01/01/2020,00:00:00.000,Workflow: GenerateFASTQWorker, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null 2.6.2.3
+01/01/2020,00:00:00.000,Starting Execution for Copier
+01/01/2020,00:00:00.000,Copy thread starting: maximum requests = 10000000
+01/01/2020,00:00:00.000,Step 1 of 3 : Demultiplexing
+01/01/2020,00:00:00.000,Demultiplexing Started
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1101
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1102
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1103
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1104
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1105
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1106
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1108
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1107
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1110
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1109
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1112
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1111
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1114
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_1113
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2102
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2101
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2104
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2103
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2106
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2105
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2108
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2107
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2110
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2109
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2112
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2111
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2114
+01/01/2020,00:00:00.000,Demultiplex tile: s_1_2113
+01/01/2020,00:00:00.000,Elapsed time (step/time(sec)/name)	1	15.5	Demultiplexing
+01/01/2020,00:00:00.000,Step 2 of 3 : Generating FASTQ Files
+01/01/2020,00:00:00.000,Queueing FASTQ file(s) for lane 1, read R1 of F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000
+01/01/2020,00:00:00.000,Queueing FASTQ file(s) for lane 1, read R2 of F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000
+01/01/2020,00:00:00.000,Launch: C:\Illumina\MiSeq Reporter\Workflows\GenerateFASTQWorker\BuildFASTQ.exe "F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Alignment\BuildFastqInput.0.xml" "F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Alignment\BuildFastqOutput.0.xml"
+01/01/2020,00:00:00.000,Launch: C:\Illumina\MiSeq Reporter\Workflows\GenerateFASTQWorker\BuildFASTQ.exe "F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Alignment\BuildFastqInput.1.xml" "F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Alignment\BuildFastqOutput.1.xml"
+01/01/2020,00:00:00.000,FASTQ generation time: 00:08:15.8
+01/01/2020,00:00:00.000,Percent >= Q30: 00.0%
+01/01/2020,00:00:00.000,Elapsed time (step/time(sec)/name)	2	495.9	Generating FASTQ Files
+01/01/2020,00:00:00.000,Step 3 of 3 : Report statistics
+01/01/2020,00:00:00.000,Evaluating GenerateFASTQ Statistics
+01/01/2020,00:00:00.000,Gathering InterOp data
+01/01/2020,00:00:00.000,Calculating overall run stats for 000000_M00000_0000_000000000-00000
+01/01/2020,00:00:00.000,Saving GenerateFASTQRunStatistics.xml
+01/01/2020,00:00:00.000,The copy queue has 50 items.
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\702-21_S6_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\702-21_S6_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\702-21_S6_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\702-21_S6_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\703-21_S7_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\703-21_S7_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\703-21_S7_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\703-21_S7_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\704-21_S8_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\704-21_S8_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\704-21_S8_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\704-21_S8_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\719-21_S9_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\719-21_S9_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Generate FASTQ Stats Complete
+01/01/2020,00:00:00.000,Elapsed time (step/time(sec)/name)	3	0.9	Report statistics
+01/01/2020,00:00:00.000,Saving Completed Job Information to F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Alignment
+01/01/2020,00:00:00.000,Total execution time: 00:08:32.4
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\719-21_S9_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\719-21_S9_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\725-21_S10_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\725-21_S10_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\725-21_S10_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\725-21_S10_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copying Remaining Files To Network
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\727-21_S11_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\727-21_S11_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\727-21_S11_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\727-21_S11_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\737-21_S12_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\737-21_S12_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\737-21_S12_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\737-21_S12_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\738-21_S19_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\738-21_S19_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\738-21_S19_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\738-21_S19_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\739-21_S20_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\739-21_S20_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\739-21_S20_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\739-21_S20_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\751-21_S13_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\751-21_S13_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\751-21_S13_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\751-21_S13_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\752-21_S14_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\752-21_S14_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\752-21_S14_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\752-21_S14_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\758-21_S21_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\758-21_S21_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\758-21_S21_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\758-21_S21_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\759-21_S15_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\759-21_S15_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\759-21_S15_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\759-21_S15_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\760-21_S16_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\760-21_S16_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\760-21_S16_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\760-21_S16_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\761-21_S22_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\761-21_S22_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\761-21_S22_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\761-21_S22_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\762-21_S23_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\762-21_S23_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\762-21_S23_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\762-21_S23_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\763-21_S24_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\763-21_S24_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\763-21_S24_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\763-21_S24_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\771-21_S17_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\771-21_S17_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\771-21_S17_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\771-21_S17_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\777-21_S18_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\777-21_S18_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\777-21_S18_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\777-21_S18_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-A_S1_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-A_S1_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-A_S1_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-A_S1_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-B_S2_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-B_S2_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-B_S2_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-B_S2_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-C_S3_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-C_S3_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-C_S3_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-C_S3_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-D_S4_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-D_S4_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-D_S4_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-D_S4_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-E_S5_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-E_S5_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-E_S5_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\CRC1-21-E_S5_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Undetermined_S0_L001_R1_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Undetermined_S0_L001_R1_001.fastq.gz
+01/01/2020,00:00:00.000,Copy F:\FAKE\FAKEAnalysis\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Undetermined_S0_L001_R2_001.fastq.gz to F:\Fake\FakeOutput\000000_M00000_0000_000000000-00000\Data\Intensities\BaseCalls\Undetermined_S0_L001_R2_001.fastq.gz
+01/01/2020,00:00:00.000,The copy queue has 26 items.

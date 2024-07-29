@@ -1,0 +1,11 @@
+Total Reads	1008000
+Aligned Reads	500000 	(50,000%)
+Aligned Reads(Including Ambiguous Locations)	500000
+Reads on Target(Including Ambiguous Locations)	450000 	(90,000%)
+Minimum Coverage	0
+Maximum Coverage	26000
+Average Coverage	2400,00
+Percent of ROI with > 300x coverage	85,000%
+Number of Bases in ROI	25000
+BED File Name	Accel_custom_merged.bed
+Number of Regions in BED File	100
