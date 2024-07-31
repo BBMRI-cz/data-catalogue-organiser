@@ -20,6 +20,11 @@ def _copy_fake_run():
     os.mkdir(FAKE_PATIENT_FILES)
 
 
+@pytest.fixture()
+def remove_analysis_from_pseudonymized_file():
+    shutil.rmtree(os.path.join(FAKE_RUN_FOR_TESTING, "Analysis"))
+
+
 def _remove_coppied_fake_run():
     shutil.rmtree(FAKE_ALL_RUNS_FOR_TESTING)
     shutil.rmtree(FAKE_PATIENT_FILES)
@@ -104,3 +109,31 @@ def test_correct_report_files(id_part):
     assert f"{predictive_number}_Mutation_Report1.vcf" in files_in_reports
 
 
+@pytest.mark.parametrize("id_part", ["1", "5", "9"])
+def test_organise_without_analysis(id_part, remove_analysis_from_pseudonymized_file):
+    organiser = RunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "2020_M00000_0000_00000000-00000",
+                             FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
+    organiser.organise_run()
+
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "00000",
+                                       "2020_M00000_0000_00000000-00000")
+
+    predictive_number = f"mmci_predictive_00000000-0000-0000-0000-00000000000{id_part}"
+
+    assert os.path.exists(os.path.join(expected_run_folder, "Samples", predictive_number, "FASTQ"))
+
+    assert not os.path.exists(os.path.join(expected_run_folder, "Samples", predictive_number, "Analysis"))
+
+
+def test_important_run_metadata_files():
+    organiser = RunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "2020_M00000_0000_00000000-00000",
+                             FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
+    organiser.organise_run()
+
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "00000",
+                                       "2020_M00000_0000_00000000-00000")
+
+    assert os.path.exists(os.path.join(expected_run_folder, "runParameters.xml"))
+    assert os.path.exists(os.path.join(expected_run_folder, "GenerateFASTQRunStatistics.xml"))
+    assert os.path.exists(os.path.join(expected_run_folder, "RunInfo.xml"))
+    assert os.path.exists(os.path.join(expected_run_folder, "AnalysisLog.txt"))

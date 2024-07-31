@@ -1,4 +1,3 @@
 pandas
-molgenis-py-client
 pytest
 pytest-mock

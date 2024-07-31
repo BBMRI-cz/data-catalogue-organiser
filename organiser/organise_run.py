@@ -5,6 +5,8 @@ import shutil
 import json
 import logging
 
+from organiser.helpers.file_helpers import copy_folder_if_exists, copy_if_exists
+
 
 class RunOrganiser:
 
@@ -24,20 +26,8 @@ class RunOrganiser:
         Path(run_path).mkdir(parents=True, exist_ok=True)
         self._create_sample_dirs(run_path, self.file)
         self._create_general_file(run_path, self.file)
-        self._create_patient_files(self.file)
+        self._create_patient_files_if_clinical_data_exist(self.file)
         return os.path.join(y, machine, run_number, self.file)
-
-    def _copy_if_exists(self, orig_path, new_path):
-        if os.path.exists(orig_path):
-            shutil.copy2(orig_path, new_path)
-        else:
-            logging.warning(f"Path {orig_path} does not exist!")
-
-    def _copy_folder_if_exists(self, orig_path, new_path):
-        if os.path.exists(orig_path):
-            shutil.copytree(orig_path, new_path)
-        else:
-            logging.warning(f"Path {orig_path} does not exist!")
 
     def _split_file_to_parts(self, filename):
         splitted_filename = filename.split("_")
@@ -69,44 +59,40 @@ class RunOrganiser:
 
         run_parameters = os.path.join(general_file_path, "runParameters.xml")
         new_run_parameters = os.path.join(new_general_file_path, "runParameters.xml")
-        self._copy_if_exists(run_parameters, new_run_parameters)
+        copy_if_exists(run_parameters, new_run_parameters)
 
         run_info = os.path.join(general_file_path, "RunInfo.xml")
         new_run_info = os.path.join(new_general_file_path, "RunInfo.xml")
-        self._copy_if_exists(run_info, new_run_info)
+        copy_if_exists(run_info, new_run_info)
 
         completed_job = os.path.join(general_file_path, "CompletedJobInfo.xml")
         new_completed_job = os.path.join(new_general_file_path, "CompletedJobInfo.xml")
-        self._copy_if_exists(completed_job, new_completed_job)
+        copy_if_exists(completed_job, new_completed_job)
 
         generate_statistics = os.path.join(general_file_path, "GenerateFASTQRunStatistics.xml")
-        new_generate_statistics = os.path.join(new_general_file_path, "GenerateFASTQRunStatistic.xml")
-        self._copy_if_exists(generate_statistics, new_generate_statistics)
+        new_generate_statistics = os.path.join(new_general_file_path, "GenerateFASTQRunStatistics.xml")
+        copy_if_exists(generate_statistics, new_generate_statistics)
 
         analysis_log = os.path.join(general_file_path, "AnalysisLog.txt")
         new_analysis_log = os.path.join(new_general_file_path, "AnalysisLog.txt")
-        self._copy_if_exists(analysis_log, new_analysis_log)
+        copy_if_exists(analysis_log, new_analysis_log)
 
         sample_sheet = os.path.join(general_file_path, "SampleSheet.csv")
         new_sample_sheet = os.path.join(new_general_file_path, "SampleSheet.csv")
-        self._copy_if_exists(sample_sheet, new_sample_sheet)
-
-        clinical_info = os.path.join(general_file_path, "clinical_info.json")
-        new_clinical_info = os.path.join(new_general_file_path, "clinical_info.json")
-        self._copy_if_exists(clinical_info, new_clinical_info)
+        copy_if_exists(sample_sheet, new_sample_sheet)
 
         data_intensities_basecalls_alignments = os.path.join(general_file_path, "Data",
                                                              "Intensities", "BaseCalls", "Alignment")
         new_data_intenstisities_basecalls_alignment = os.path.join(new_general_file_path, "Data",
                                                                    "Intensities", "BaseCalls")
         Path(new_data_intenstisities_basecalls_alignment).mkdir(parents=True, exist_ok=True)
-        self._copy_folder_if_exists(
+        copy_folder_if_exists(
             data_intensities_basecalls_alignments,
             os.path.join(new_data_intenstisities_basecalls_alignment, "Alignment"))
 
         catalog_info_per_pac = os.path.join(general_file_path, "catalog_info_per_pred_number")
         new_catalog_info_per_pac = os.path.join(new_general_file_path, "catalog_info_per_pred_number")
-        self._copy_folder_if_exists(catalog_info_per_pac, new_catalog_info_per_pac)
+        copy_folder_if_exists(catalog_info_per_pac, new_catalog_info_per_pac)
 
     def _get_pseudo_numbers(self, sample_sheet_path):
         df = pd.read_csv(sample_sheet_path, delimiter=",",
@@ -125,30 +111,30 @@ class RunOrganiser:
 
         for file in os.listdir(basecalls):
             if pseudo_number in file:
-                self._copy_if_exists(os.path.join(basecalls, file), os.path.join(new_fastq_folder, file))
+                copy_if_exists(os.path.join(basecalls, file), os.path.join(new_fastq_folder, file))
 
         # analysis
         analysis = os.path.join(self.pseudo_run, filename, "Analysis")
-        new_analysis = os.path.join(new_folder, "Analysis")
-        Path(new_analysis).mkdir(parents=True, exist_ok=True)
+        if os.path.exists(analysis):
+            new_analysis = os.path.join(new_folder, "Analysis")
+            Path(new_analysis).mkdir(parents=True, exist_ok=True)
 
-        if os.path.exists(os.path.join(analysis, "BAM")):
-            self._get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
-        else:
-            logging.warning(f"Path {os.path.join(analysis, 'BAM')} does not exist!")
+            if os.path.exists(os.path.join(analysis, "BAM")):
+                self._get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
+            else:
+                logging.warning(f"Path {os.path.join(analysis, 'BAM')} does not exist!")
 
-        for file in os.listdir(analysis):
-            if "_Output" in file and pseudo_number in file:
-                modified_pseudo_number = file.replace("_Output", "")
-                if os.path.exists(os.path.join(analysis, file, modified_pseudo_number)):
-                    self._get_outputs(os.path.join(analysis, file, modified_pseudo_number),
-                                      new_analysis, modified_pseudo_number)
-                elif os.path.exists(os.path.join(analysis, file, "sens")):
-                    self._get_outputs(os.path.join(analysis, file, "sens"), new_analysis, modified_pseudo_number)
-                if os.path.exists(os.path.join(analysis, file, "Preprocessed")):
-                    self._get_convert(os.path.join(analysis, file, "Preprocessed"), new_analysis)
+            for file in os.listdir(analysis):
+                if "_Output" in file and pseudo_number in file:
+                    modified_pseudo_number = file.replace("_Output", "")
+                    if os.path.exists(os.path.join(analysis, file, modified_pseudo_number)):
+                        self._get_outputs(os.path.join(analysis, file, modified_pseudo_number),
+                                          new_analysis, modified_pseudo_number)
+                    elif os.path.exists(os.path.join(analysis, file, "sens")):
+                        self._get_outputs(os.path.join(analysis, file, "sens"), new_analysis, modified_pseudo_number)
+                    if os.path.exists(os.path.join(analysis, file, "Preprocessed")):
+                        self._get_convert(os.path.join(analysis, file, "Preprocessed"), new_analysis)
 
-        # metadata
     def _get_bams(self, path, new_path, pseudo_number):
         for file in os.listdir(path):
             if pseudo_number in file and ".bam" in file:
@@ -166,10 +152,10 @@ class RunOrganiser:
 
         new_reports_folder = os.path.join(new_path, "Reports")
 
-        self._copy_if_exists(parameters, new_parameters)
-        self._copy_if_exists(stat_info, new_stat_info)
-        self._copy_folder_if_exists(reports_folder, new_reports_folder)
-        self._copy_if_exists(bamconversion, new_bamconversion)
+        copy_if_exists(parameters, new_parameters)
+        copy_if_exists(stat_info, new_stat_info)
+        copy_folder_if_exists(reports_folder, new_reports_folder)
+        copy_if_exists(bamconversion, new_bamconversion)
 
     def _get_convert(self, path, new_path):
         for file in os.listdir(path):
@@ -179,8 +165,11 @@ class RunOrganiser:
             if file.endswith("RemoveDuplicates.log"):
                 shutil.copy2(os.path.join(path, file), os.path.join(new_path, file))
 
-    def _create_patient_files(self,  run_file):
+    def _create_patient_files_if_clinical_data_exist(self, run_file):
         clinical_info_path = os.path.join(self.pseudo_run, run_file, "catalog_info_per_pred_number")
+
+        if not os.path.exists(clinical_info_path):
+            return
 
         for file in os.listdir(clinical_info_path):
             with open(os.path.join(clinical_info_path, file), "r") as json_file:
