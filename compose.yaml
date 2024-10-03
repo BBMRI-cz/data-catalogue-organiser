@@ -3,7 +3,7 @@ services:
   run:
     build: .
     volumes:
-      - /home/houfek/Work/MMCI/sequencing_pipeline/data-catalogue-playground/muni-sc/MiSEQ/:/PseudonymizedRuns
+      - /home/houfek/Work/MMCI/sequencing_pipeline/data-catalogue-playground/muni-sc/PseudonymizedRunes:/PseudonymizedRuns
       - /home/houfek/Work/MMCI/sequencing_pipeline/data-catalogue-playground/muni-sc/OrganisedRuns/:/OrganisedRuns
       - /home/houfek/Work/MMCI/sequencing_pipeline/data-catalogue-playground/muni-sc/Patients/:/Patients
     command: bash -c "python main.py
