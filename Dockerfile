@@ -11,7 +11,4 @@ ADD tests/ tests/
 
 RUN pip install -r requirements.txt
 
-# USER 1005
-USER 1001
-
-CMD ["pytest", "tests"]
+USER 1005

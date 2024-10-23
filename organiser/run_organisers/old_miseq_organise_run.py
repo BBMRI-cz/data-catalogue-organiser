@@ -154,7 +154,11 @@ class OldMiseqRunOrganiser(OrganiseRun):
             with open(os.path.join(clinical_info_path, file), "r") as json_file:
                 data = json.load(json_file)
 
-            year = data["birth"].split("/")[2]
+            split_birth = data["birth"].split("/")
+            if len(split_birth) == 2:
+                year = split_birth [1] # old format
+            else:
+                year = split_birth [2] # new format
             patient_folder = os.path.join(self.organised_patients, year, f"{data['ID']}")
             Path(patient_folder).mkdir(parents=True, exist_ok=True)
             patient_metadata_file = os.path.join(patient_folder, "patient_metadata.json")

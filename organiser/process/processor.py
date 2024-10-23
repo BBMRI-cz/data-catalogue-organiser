@@ -35,16 +35,20 @@ class Processor:
     def _try_organise_run(self, run, organiser) -> bool:
         try:
             organiser.organise_run()
+            shutil.move(os.path.join(self.psedunymized_runs_folder, run),
+                        os.path.join(self.organised_files_folder, "backups", run))
+            logging.info(f"Run {run} moved into backups")
+            return True
         except FileNotFoundError as e:
-            logging.error(f"Run {run} is missing some data\nError:\n{e}")
+            logging.exception(f"Run {run} is missing some data\nError:\n{e}")
             shutil.move(os.path.join(self.psedunymized_runs_folder, run),
                         os.path.join(self.organised_files_folder, "errors", run))
             return False
-
-        shutil.move(os.path.join(self.psedunymized_runs_folder, run),
-                    os.path.join(self.organised_files_folder, "backups", run))
-        logging.info(f"Run {run} moved into backups")
-        return True
+        except Exception as e:
+            logging.exception(f"Unknown error: {e}")
+            shutil.move(os.path.join(self.psedunymized_runs_folder, run),
+                        os.path.join(self.organised_files_folder, "errors", run))
+            return False
 
     def _create_important_folders_if_not_exist(self):
         create_dictionary_if_not_exist(os.path.join(self.organised_files_folder, "logs"))
