@@ -1,18 +1,55 @@
 # data-catalogue-organiser
 This is the repository for the oragnisation part of the BBMRI.cz data catalog.
 
-# Organisation
+## Organisation
+Organises pseudonymized sequencing files into the following structure:
+- OrganisedRuns
+  - year
+    - sequencing_type
+      - run_number
 
-### MiSEQ
-Collect pseudonymized data, organises the data to a specific folder hierarchy, collects metadata for the catalogue and uploads the metadata to data.bbmri.cz
+## Supported sequencing types
+Miseq, New Miseq, MammaPrint
 
-The whole pipeline is managed in `pipeline.py`:
+## How to run the scripts
+### Locally - Development
+#### Using main.py
+1. Install requirements
+```bash
+pip install -r requiremenents.txt
+```
+2. Run main.py
+```bash
+python main.py -r path/to/pseudonymized/runs/folder  -o /path/to/root/organisation/folder -p /path/to/patients/folder
+```
+#### Using docker-compose
+```bash
+docker-compose up -f compose.yml -d --build
+```
+### In production
+Production is running on Kubernetes cluster SensitiveCloud
+#### Using kubernetes (kubectl)
+Deploy dependent secrets
+```bash
+kubectl apply -f kubernetes/catalog-secret.yaml -n bbmri-mou-ns
+kubectl apply -f kubernetes/organiser-secret.yaml -n bbmri-mou-ns
+```
+```bash
+kubectl apply -f kubernetes/organiser-job.yaml -n bbmri-mou-ns
+```
+#### Deploying new version in production
+Build new docker image
+```bash
+docker build --no-cache <public-dockerhub-repository>/data-catalogue-organiser:<version> .
+docker push <public-dockerhub-repository>/data-catalogue-organiser:<version> 
+# change version in kubernetes/organiser-job.yaml
+```
+#### Debigging
+You can visit kubernetes UI [Rancher](https://rancher.cloud.trusted.e-infra.cz/) find the failing pod and investigate in logs.
+On how to use Rancher and SensitiveCloud visit [Docs](https://docs.cerit.io/en/platform/overview)
 
-1. Data are organised using class **RunOrganiser** defined in `organise_run.py`
-2. The metadata of the whole run are collected using class **CollectRunMetadata** defined in `miseq_run_metadata.py`
-3. For each sample in the run specific metadata are collected by class **CollectSampleMetadata** defined in `miseq_sample_metadata.py`
-4. Uploading the data to the data.bbmri.cz catalogue using class **MolgenisImporter** defined in `import_metadata.py`
-
-Additional files: 
-
-`manage_libraries.py` - This file extracts specific details about the libraries used for sequencing and more additional information.
+Other option is running a testing job and investigation inside the cluster filemanager (to check user permissions etc.)
+```bash
+kubectl apply kubectl apply -f kubernetes/testing-job.yaml -n bbmri-mou-ns
+```
+Then connect to terminal of this job/pod on [Rancher](https://rancher.cloud.trusted.e-infra.cz/)
