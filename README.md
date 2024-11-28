@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/682957571.svg)](https://doi.org/10.5281/zenodo.10408794)
 # data-catalogue-organiser
 This is the repository for the oragnisation part of the BBMRI.cz data catalog.
 
