@@ -9,7 +9,8 @@ if __name__ == "__main__":
 
     parser.add_argument("-r", "--runs", type=str, required=True, help="Path to pseudonymized runs")
     parser.add_argument("-o", "--output", type=str, required=True, help="Path to the organise file")
+    parser.add_argument("-n", "--nextseq_ouput", type=str, required=True, help="Temporary nextseq folder")
     parser.add_argument("-p", "--patients", type=str, required=True, help="Path to a patient folder")
     args = parser.parse_args()
 
-    Processor(args.runs, args.output, args.patients).process_runs()
+    Processor(args.runs, args.output, args.nextseq_output, args.patients).process_runs()

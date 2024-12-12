@@ -5,7 +5,7 @@ from organiser.helpers.file_helpers import copy_folder_if_exists, copy_if_exists
 from .old_miseq_organise_run import OldMiseqRunOrganiser
 
 
-class NewMiseqOrganiseRun(OldMiseqRunOrganiser):
+class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
 
     def organise_run(self):
         y = self._get_file_year()

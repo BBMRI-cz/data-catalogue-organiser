@@ -1,6 +1,7 @@
 import pytest
 import os
 import shutil
+import pandas as pd
 
 from organiser.run_organisers.old_miseq_organise_run import OldMiseqRunOrganiser
 
@@ -37,12 +38,24 @@ def setup_and_teardown_organise_files(request):
     request.addfinalizer(_remove_coppied_fake_run)
 
 
+@pytest.fixture
+def mamaprint_experiment_name():
+    sample_sheet_path = os.path.join(FAKE_RUN_FOR_TESTING, "SampleSheet.csv")
+    df = pd.read_csv(sample_sheet_path, delimiter=",",
+                     names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
+                            "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
+
+    experiment_name = df[df["[Header]"] == "Experiment Name"]["Unnamed: 1"].tolist()[0]
+    df.at[3, "Unnamed: 1"] = "MP-255"
+    df.to_csv(sample_sheet_path)
+
+
 def test_folder_structure_correct():
     organiser = OldMiseqRunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "200101_M00000_0000_00000000-00000",
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    assert os.path.exists(os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    assert os.path.exists(os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000"))
 
 
@@ -52,7 +65,7 @@ def test_correct_files_fastq(id_part):
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000")
 
     predictive_number = f"mmci_predictive_00000000-0000-0000-0000-00000000000{id_part}"
@@ -69,7 +82,7 @@ def test_correct_analysis_files(id_part):
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000")
 
     predictive_number = f"mmci_predictive_00000000-0000-0000-0000-00000000000{id_part}"
@@ -92,7 +105,7 @@ def test_correct_report_files(id_part):
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000")
 
     predictive_number = f"mmci_predictive_00000000-0000-0000-0000-00000000000{id_part}"
@@ -115,7 +128,7 @@ def test_organise_without_analysis(id_part, remove_analysis_from_pseudonymized_f
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "missing-analysis",
                                        "200101_M00000_0000_00000000-00000")
 
     predictive_number = f"mmci_predictive_00000000-0000-0000-0000-00000000000{id_part}"
@@ -125,12 +138,22 @@ def test_organise_without_analysis(id_part, remove_analysis_from_pseudonymized_f
     assert not os.path.exists(os.path.join(expected_run_folder, "Samples", predictive_number, "Analysis"))
 
 
+def test_organiser_mama_print(remove_analysis_from_pseudonymized_file, mamaprint_experiment_name):
+    organiser = OldMiseqRunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "200101_M00000_0000_00000000-00000",
+                                     FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
+    organiser.organise_run()
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "mamma-print",
+                                       "200101_M00000_0000_00000000-00000")
+    predictive_number = f"mmci_predictive_00000000-0000-0000-0000-000000000001"
+
+    assert os.path.exists(os.path.join(expected_run_folder, "Samples", predictive_number, "FASTQ"))
+
 def test_important_run_metadata_files():
     organiser = OldMiseqRunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "200101_M00000_0000_00000000-00000",
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000")
 
     assert os.path.exists(os.path.join(expected_run_folder, "runParameters.xml"))
@@ -144,7 +167,7 @@ def test_alignment_folder():
                                      FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
     organiser.organise_run()
 
-    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ",
+    expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000")
 
     assert os.path.exists(os.path.join(expected_run_folder, "Alignment"))

@@ -3,16 +3,19 @@ import shutil
 import logging
 import sys
 from datetime import datetime
+import pandas as pd
+from organiser.run_organisers.nextseq_organise_run import NextSeqRunOrganiser
 from organiser.run_organisers.old_miseq_organise_run import OldMiseqRunOrganiser
-from organiser.run_organisers.new_miseq_organise_run import NewMiseqOrganiseRun
+from organiser.run_organisers.new_miseq_organise_run import NewMiseqRunOrganiser
 from organiser.run_organisers.organise_run import OrganiseRun
 from organiser.helpers.file_helpers import create_dictionary_if_not_exist
 
 
 class Processor:
-    def __init__(self, pseudnymized_runs_folder, folder_for_organised_files, patient_folder):
+    def __init__(self, pseudnymized_runs_folder, folder_for_organised_files, next_seq_temporary_folder, patient_folder):
         self.psedunymized_runs_folder = pseudnymized_runs_folder
         self.organised_files_folder = folder_for_organised_files
+        self.next_seq_temporary_folder = next_seq_temporary_folder
         self.patient_folder = patient_folder
 
     def process_runs(self):
@@ -60,9 +63,22 @@ class Processor:
 
         if "Alignment_1" in os.listdir(full_run_path) or "SoftwareVersionsFile" in os.listdir(full_run_path):
             logging.info(f"{run_path} processed as New Miseq")
-            return NewMiseqOrganiseRun(self.psedunymized_runs_folder, run_path,
-                                       self.organised_files_folder, self.patient_folder)
+            return NewMiseqRunOrganiser(self.psedunymized_runs_folder, run_path,
+                                        self.organised_files_folder, self.patient_folder)
+        elif self._is_run_nextseq(full_run_path):
+            logging.info(f"{run_path} processed as NextSeq")
+            return NextSeqRunOrganiser(self.psedunymized_runs_folder, run_path,
+                                       self.next_seq_temporary_folder, self.patient_folder)
         else:
             logging.info(f"{run_path} processed as Old Miseq")
             return OldMiseqRunOrganiser(self.psedunymized_runs_folder, run_path,
                                         self.organised_files_folder, self.patient_folder)
+
+    def _is_run_nextseq(self, full_run_path) -> bool:
+        sample_sheet_path = os.path.join(full_run_path, "SampleSheet.csv")
+        df = pd.read_csv(sample_sheet_path, delimiter=",",
+                         names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
+                                "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
+
+        application_value = df[df["[Header]"] == "Application"]["Unnamed: 1"].tolist()[0]
+        return application_value.startswith("NextSeq")

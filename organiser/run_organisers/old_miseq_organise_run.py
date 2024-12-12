@@ -21,7 +21,8 @@ class OldMiseqRunOrganiser(OrganiseRun):
     def organise_run(self):
         y = self._get_file_year()
         machine = "MiSEQ"
-        folder_for_run_path = os.path.join(self.organised_runs, y, machine)
+        subtype = self._get_subtype()
+        folder_for_run_path = os.path.join(self.organised_runs, y, machine, subtype)
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
@@ -32,6 +33,20 @@ class OldMiseqRunOrganiser(OrganiseRun):
         splitted_filename = self.file.split("_")
         year = splitted_filename[0][:2]
         return f"20{year}"
+
+    def _get_subtype(self) -> str:
+        analysis = os.path.join(self.pseudo_run, self.file, "Analysis")
+        if os.path.exists(analysis):
+            return "complete-runs"
+        else:
+            sample_sheet_path = os.path.join(self.pseudo_run, self.file, "SampleSheet.csv")
+            df = pd.read_csv(sample_sheet_path, delimiter=",",  names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
+                                "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
+            experiment_name = df[df["[Header]"] == "Experiment Name"]["Unnamed: 1"].tolist()[0]
+            if experiment_name.startswith("MP"):
+                return "mamma-print"
+            else:
+                return "missing-analysis"
 
     def _create_sample_dirs(self, run_samples_path):
         sample_sheet_path = os.path.join(self.pseudo_run, self.file, "SampleSheet.csv")

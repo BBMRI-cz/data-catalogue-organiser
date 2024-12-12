@@ -41,7 +41,7 @@ spec:
                   secretKeyRef:
                     name: catalog-secret
                     key: httpsproxy
-            command: ["python", "main.py", "-r", "/data/PSEUDONYMIZED", "-o", "/data/OrganisedRuns/", "-p", "/data/Patients/"]
+            command: ["python", "main.py", "-r", "/data/PSEUDONYMIZED", "-n", "data/NextSeqTemp/" ,"-o", "/data/OrganisedRuns/", "-p", "/data/Patients/"]
             volumeMounts:
             - name: storage-catalogue-volume
               mountPath: /data/

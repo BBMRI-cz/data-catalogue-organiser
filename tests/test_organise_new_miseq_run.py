@@ -2,7 +2,7 @@ import pytest
 import os
 import shutil
 
-from organiser.run_organisers.new_miseq_organise_run import NewMiseqOrganiseRun
+from organiser.run_organisers.new_miseq_organise_run import NewMiseqRunOrganiser
 
 FAKE_ALL_RUNS_FOR_TESTING = os.path.join(os.path.dirname(__file__), "FAKE_PSEUDONYMIZED_RUNS")
 FAKE_RUN_FOR_COPY = os.path.join(os.path.dirname(__file__), "test_pseudonymized_runs",
@@ -44,8 +44,8 @@ def setup_and_teardown_organise_files(request):
 
 
 def get_organiser():
-    return NewMiseqOrganiseRun(FAKE_ALL_RUNS_FOR_TESTING, "240101_M00000_0000_00000000-00000",
-                               FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
+    return NewMiseqRunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "240101_M00000_0000_00000000-00000",
+                                FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
 
 
 def test_folder_structure_correct():
