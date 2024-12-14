@@ -12,10 +12,9 @@ from organiser.helpers.file_helpers import create_dictionary_if_not_exist
 
 
 class Processor:
-    def __init__(self, pseudnymized_runs_folder, folder_for_organised_files, next_seq_temporary_folder, patient_folder):
+    def __init__(self, pseudnymized_runs_folder, folder_for_organised_files, patient_folder):
         self.psedunymized_runs_folder = pseudnymized_runs_folder
         self.organised_files_folder = folder_for_organised_files
-        self.next_seq_temporary_folder = next_seq_temporary_folder
         self.patient_folder = patient_folder
 
     def process_runs(self):
@@ -68,7 +67,7 @@ class Processor:
         elif self._is_run_nextseq(full_run_path):
             logging.info(f"{run_path} processed as NextSeq")
             return NextSeqRunOrganiser(self.psedunymized_runs_folder, run_path,
-                                       self.next_seq_temporary_folder, self.patient_folder)
+                                       self.organised_files_folder, self.patient_folder)
         else:
             logging.info(f"{run_path} processed as Old Miseq")
             return OldMiseqRunOrganiser(self.psedunymized_runs_folder, run_path,
