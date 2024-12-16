@@ -32,7 +32,6 @@ Production is running on Kubernetes cluster SensitiveCloud
 #### Using kubernetes (kubectl)
 Deploy dependent secrets
 ```bash
-kubectl apply -f kubernetes/catalog-secret.yaml -n bbmri-mou-ns
 kubectl apply -f kubernetes/organiser-secret.yaml -n bbmri-mou-ns
 ```
 ```bash
