@@ -10,5 +10,3 @@ ADD organiser/ organiser/
 ADD tests/ tests/
 
 RUN pip install -r requirements.txt
-
-USER 1001

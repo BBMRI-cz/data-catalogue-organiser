@@ -79,5 +79,8 @@ class Processor:
                          names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
                                 "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
 
-        application_value = df[df["[Header]"] == "Application"]["Unnamed: 1"].tolist()[0]
+        application_list = df[df["[Header]"] == "Application"]["Unnamed: 1"].tolist()
+        if not application_list:
+            return False
+        application_value = application_list[0]
         return application_value.startswith("NextSeq")
