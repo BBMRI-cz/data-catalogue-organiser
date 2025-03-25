@@ -10,7 +10,8 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
     def organise_run(self):
         y = self._get_file_year()
         machine = "MiSEQ"
-        folder_for_run_path = os.path.join(self.organised_runs, y, machine)
+        subtype = self._get_subtype()
+        folder_for_run_path = os.path.join(self.organised_runs, y, machine, subtype)
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
