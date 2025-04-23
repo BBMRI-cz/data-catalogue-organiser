@@ -15,8 +15,11 @@ def copy_if_exists(orig_path, new_path):
         logging.warning(f"Path {orig_path} does not exist!")
 
 
-def copy_folder_if_exists(orig_path, new_path):
+def copy_folder_if_exists(orig_path, new_path, ignore_list=None):
+    if ignore_list is None:
+        ignore_list = []
     if os.path.exists(orig_path):
-        shutil.copytree(orig_path, new_path)
+        ignore_func = shutil.ignore_patterns(*ignore_list)
+        shutil.copytree(orig_path, new_path, ignore=ignore_func)
     else:
         logging.warning(f"Path {orig_path} does not exist!")

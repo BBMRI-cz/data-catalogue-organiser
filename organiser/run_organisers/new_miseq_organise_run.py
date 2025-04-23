@@ -40,27 +40,23 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
 
     def _copy_important_files(self, old_path, new_path):
         files_to_move = [
-            os.path.join("Alignment_1", "AnalysisError.txt"),
-            os.path.join("Alignment_1", "AnalysisLog.txt"),
-            os.path.join("Alignment_1", "Checkpoint.txt"),
-            os.path.join("Alignment_1", "CompletedJobInfo.xml"),
-            os.path.join("Alignment_1", "DemultiplexSummaryF1L1.txt"),
             "RunParameters.xml",
             "RunInfo.xml",
             "SampleSheet.csv",
             "GenerateFASTQRunStatistics.xml"
         ]
         for file in files_to_move:
-            file = file.replace("Alignment_1", "Alignment")
             base = os.path.basename(file)
             old_file_path = os.path.join(old_path, file)
             new_file_path = os.path.join(new_path, os.path.basename(file))
             copy_if_exists(old_file_path, new_file_path)
 
     def _copy_important_folders(self, old_path, new_path):
-        folder_paths = [os.path.join("Alignment_1", "Logging"), os.path.join("Alignment", "Logging"),
-                        ("catalog_info_per_pred_number", "catalog_info_per_pred_number")]
-        for old, new in folder_paths:
+        folder_paths = [
+            ("Alignment_1", "Alignment", ["Fastq"]),
+            ("catalog_info_per_pred_number", "catalog_info_per_pred_number", None)
+        ]
+        for old, new, ignore in folder_paths:
             old_folder_path = os.path.join(old_path, old)
             new_folder_path = os.path.join(new_path, new)
-            copy_folder_if_exists(old_folder_path, new_folder_path)
+            copy_folder_if_exists(old_folder_path, new_folder_path, ignore_list=ignore)
