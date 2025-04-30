@@ -40,6 +40,8 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
 
     def _copy_important_files(self, old_path, new_path):
         files_to_move = [
+            os.path.join("Alignment_1", "AnalysisLog.txt"),
+            os.path.join("Alignment_1", "CompletedJobInfo.xml"),
             "RunParameters.xml",
             "RunInfo.xml",
             "SampleSheet.csv",
