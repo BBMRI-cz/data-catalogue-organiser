@@ -19,16 +19,6 @@ class NextSeqRunOrganiser(OldMiseqRunOrganiser):
         self._copy_important_files(os.path.join(self.pseudo_run, self.file), os.path.join(new_file_path, self.file))
         self._copy_important_folders(os.path.join(self.pseudo_run, self.file), os.path.join(new_file_path, self.file))
 
-    def _collect_data_for_pseudo_number(self, new_folder, pseudo_number):
-        fastq_files = os.path.join(self.pseudo_run, self.file, "FASTQ")
-        if not os.path.exists(fastq_files):
-            return
-        os.mkdir(os.path.join(new_folder, "FASTQ"))
-        for file in os.listdir(fastq_files):
-            if pseudo_number in file:
-                copy_if_exists(os.path.join(fastq_files, file),
-                               os.path.join(new_folder, "FASTQ", file))
-
 
     def _copy_important_files(self, old_path, new_path):
         files_to_move = ["RunInfo.xml", "RunParameters.xml", "RunCompletionStatus.xml", "SampleSheet.csv"]
@@ -41,7 +31,6 @@ class NextSeqRunOrganiser(OldMiseqRunOrganiser):
 
     def _copy_important_folders(self, old_path, new_path):
         folders_path = [
-            "Data",
             "catalog_info_per_pred_number"
         ]
         for folder in folders_path:
