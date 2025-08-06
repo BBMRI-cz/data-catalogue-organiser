@@ -15,7 +15,7 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
-        self._create_patient_files_if_clinical_data_exist()
+        self._create_patient_files_if_clinical_data_exist(folder_for_run_path)
         return os.path.join(folder_for_run_path, self.file)
 
     def _collect_data_for_pseudo_number(self, new_folder, pseudo_number):

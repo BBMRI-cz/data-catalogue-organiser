@@ -4,6 +4,8 @@ from pathlib import Path
 import shutil
 import json
 import logging
+import errno
+import traceback
 
 from .organise_run import OrganiseRun
 from organiser.helpers.file_helpers import copy_folder_if_exists, copy_if_exists
@@ -26,7 +28,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
-        self._create_patient_files_if_clinical_data_exist()
+        self._create_patient_files_if_clinical_data_exist(folder_for_run_path)
         return os.path.join(folder_for_run_path, self.file)
 
     def _get_file_year(self):
@@ -159,8 +161,8 @@ class OldMiseqRunOrganiser(OrganiseRun):
             if file.endswith("RemoveDuplicates.log"):
                 shutil.copy2(os.path.join(path, file), os.path.join(new_path, file))
 
-    def _create_patient_files_if_clinical_data_exist(self):
-        clinical_info_path = os.path.join(self.pseudo_run, self.file, "catalog_info_per_pred_number")
+    def _create_patient_files_if_clinical_data_exist(self, folder_for_run_path):
+        clinical_info_path = os.path.join(folder_for_run_path, self.file, "catalog_info_per_pred_number")
 
         if not os.path.exists(clinical_info_path):
             return
@@ -168,6 +170,8 @@ class OldMiseqRunOrganiser(OrganiseRun):
         for file in os.listdir(clinical_info_path):
             with open(os.path.join(clinical_info_path, file), "r") as json_file:
                 data = json.load(json_file)
+
+            predictive_number = file.replace(".json", "")
 
             split_birth = data["birth"].split("/")
             if len(split_birth) == 2:
@@ -179,3 +183,14 @@ class OldMiseqRunOrganiser(OrganiseRun):
             patient_metadata_file = os.path.join(patient_folder, "patient_metadata.json")
             with open(patient_metadata_file, "w") as f:
                 json.dump(data, f, indent=4)
+            src = os.path.join(folder_for_run_path, self.file, "Samples", predictive_number)
+            dst = os.path.join(patient_folder, predictive_number)
+            try:
+                if os.path.exists(src) and not os.path.exists(dst):
+                    os.symlink(src, dst)
+                    print(f"Created symlink: {dst} → {src}")
+                else:
+                    print(f"Skipping symlink: {dst} already exists or {src} not found")
+            except OSError as e:
+                print("Symlink failed")
+                traceback.print_exc()
