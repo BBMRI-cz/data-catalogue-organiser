@@ -42,9 +42,11 @@ class OldMiseqRunOrganiser(OrganiseRun):
             return "complete-runs"
         else:
             sample_sheet_path = os.path.join(self.pseudo_run, self.file, "SampleSheet.csv")
-            df = pd.read_csv(sample_sheet_path, delimiter=",",  names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
-                                "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
-            experiment_name = df[df["[Header]"] == "Experiment Name"]["Unnamed: 1"].tolist()[0]
+            df = pd.read_csv(sample_sheet_path, header=None)
+            experiment_name_row = df[df[0] == "Experiment Name"]
+            if experiment_name_row.empty:
+                return "missing-analysis"
+            experiment_name = experiment_name_row.iloc[0, 1]
             if experiment_name.startswith("MP"):
                 return "mamma-print"
             else:
@@ -87,10 +89,8 @@ class OldMiseqRunOrganiser(OrganiseRun):
             copy_folder_if_exists(old_folder_path, new_folder_path)
 
     def _get_pseudo_numbers(self, sample_sheet_path):
-        df = pd.read_csv(sample_sheet_path, delimiter=",",
-                         names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
-                                "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
-        sample_list_header = df["[Header]"].to_list()
+        df = pd.read_csv(sample_sheet_path, header=None)
+        sample_list_header = df[0].to_list()
         sample_id = sample_list_header.index("Sample_ID") + 1
         pseudo_numbers = sample_list_header[sample_id:]
 
