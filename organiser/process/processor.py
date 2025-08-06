@@ -75,12 +75,9 @@ class Processor:
 
     def _is_run_nextseq(self, full_run_path) -> bool:
         sample_sheet_path = os.path.join(full_run_path, "SampleSheet.csv")
-        df = pd.read_csv(sample_sheet_path, delimiter=",",
-                         names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
-                                "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
-
-        application_list = df[df["[Header]"] == "Application"]["Unnamed: 1"].tolist()
-        if not application_list:
+        df = pd.read_csv(sample_sheet_path, header=None)
+        application_rows = df[df[0] == "Application"]
+        if application_rows.empty:
             return False
-        application_value = application_list[0]
+        application_value = application_rows.iloc[0, 1]
         return application_value.startswith("NextSeq")
