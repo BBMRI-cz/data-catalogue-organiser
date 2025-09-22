@@ -1,6 +1,6 @@
 import os
 import shutil
-import logging
+from organiser.logging_config.logging_config import LoggingConfig
 
 
 def create_dictionary_if_not_exist(path_to_create):
@@ -9,17 +9,19 @@ def create_dictionary_if_not_exist(path_to_create):
 
 
 def copy_if_exists(orig_path, new_path):
+    logger = LoggingConfig.get_logger()
     if os.path.exists(orig_path):
         shutil.copy2(orig_path, new_path)
     else:
-        logging.warning(f"Path {orig_path} does not exist!")
+        logger.warning(f"Path {orig_path} does not exist!")
 
 
 def copy_folder_if_exists(orig_path, new_path, ignore_list=None):
+    logger = LoggingConfig.get_logger()
     if ignore_list is None:
         ignore_list = []
     if os.path.exists(orig_path):
         ignore_func = shutil.ignore_patterns(*ignore_list)
         shutil.copytree(orig_path, new_path, ignore=ignore_func)
     else:
-        logging.warning(f"Path {orig_path} does not exist!")
+        logger.warning(f"Path {orig_path} does not exist!")

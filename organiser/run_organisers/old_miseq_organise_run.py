@@ -3,12 +3,12 @@ import pandas as pd
 from pathlib import Path
 import shutil
 import json
-import logging
 import errno
 import traceback
 
 from .organise_run import OrganiseRun
 from organiser.helpers.file_helpers import copy_folder_if_exists, copy_if_exists
+from organiser.logging_config.logging_config import LoggingConfig
 
 
 class OldMiseqRunOrganiser(OrganiseRun):
@@ -19,6 +19,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
         self.file = name_of_single_run
         self.organised_runs = path_to_oragnised_storage
         self.organised_patients = path_to_patients
+        self.logger = LoggingConfig.get_logger()
 
     def organise_run(self):
         y = self._get_file_year()
@@ -118,7 +119,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
             if os.path.exists(os.path.join(analysis, "BAM")):
                 self._get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
             else:
-                logging.warning(f"Path {os.path.join(analysis, 'BAM')} does not exist!")
+                self.logger.warning(f"Path {os.path.join(analysis, 'BAM')} does not exist!")
 
             for file in os.listdir(analysis):
                 if "_Output" in file and pseudo_number in file:
