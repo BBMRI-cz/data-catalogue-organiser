@@ -25,7 +25,12 @@ spec:
             - /muni-sc/OrganisedRuns/
             - -p
             - /muni-sc/Patients/
-            image: m16f/data-catalogue-organiser:1.6.0
+            - -l
+            - /muni-sc/OrganisedRuns/logs
+            env:
+            - name: LOG_LEVEL
+              value: INFO
+            image: m16f/data-catalogue-organiser:1.7.0
             imagePullPolicy: Always
             name: organise-sequencing
             securityContext:
