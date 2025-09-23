@@ -30,7 +30,6 @@ class Processor:
             organiser = self._get_correct_organiser(run)
             self._try_organise_run(run, organiser)
             logger.info(f"Run {run} was organised!")
-            logger.debug("just testing")
 
 
     def _try_organise_run(self, run, organiser) -> bool:

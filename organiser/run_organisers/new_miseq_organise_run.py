@@ -11,8 +11,10 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
         y = self._get_file_year()
         machine = "MiSEQ"
         subtype = self._get_subtype()
+        self.logger.info(f"Determined subtype: {subtype}")
         folder_for_run_path = os.path.join(self.organised_runs, y, machine, subtype)
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
+        self.logger.info(f"Created folder for run: {folder_for_run_path}")
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
         self._create_patient_files_if_clinical_data_exist(folder_for_run_path)
@@ -37,6 +39,7 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
 
         self._copy_important_files(general_file_path, new_general_file_path)
         self._copy_important_folders(general_file_path, new_general_file_path)
+        self.logger.info(f"Copied important files and directories into: {new_general_file_path}")
 
     def _copy_important_files(self, old_path, new_path):
         files_to_move = [

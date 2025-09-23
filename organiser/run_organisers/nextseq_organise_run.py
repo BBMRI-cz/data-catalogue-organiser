@@ -10,6 +10,7 @@ class NextSeqRunOrganiser(OldMiseqRunOrganiser):
         machine = "NextSeq"
         folder_for_run_path = os.path.join(self.organised_runs, y, machine)
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
+        self.logger.info(f"Created folder for run: {folder_for_run_path}")
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
         self._create_patient_files_if_clinical_data_exist(folder_for_run_path)
@@ -18,6 +19,7 @@ class NextSeqRunOrganiser(OldMiseqRunOrganiser):
     def _create_general_file(self, new_file_path):
         self._copy_important_files(os.path.join(self.pseudo_run, self.file), os.path.join(new_file_path, self.file))
         self._copy_important_folders(os.path.join(self.pseudo_run, self.file), os.path.join(new_file_path, self.file))
+        self.logger.info(f"Copied important files and directories into: {os.path.join(new_file_path, self.file)}")
 
 
     def _copy_important_files(self, old_path, new_path):

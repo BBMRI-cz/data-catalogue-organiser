@@ -25,8 +25,10 @@ class OldMiseqRunOrganiser(OrganiseRun):
         y = self._get_file_year()
         machine = "MiSEQ"
         subtype = self._get_subtype()
+        self.logger.info(f"Determined subtype: {subtype}")
         folder_for_run_path = os.path.join(self.organised_runs, y, machine, subtype)
         Path(folder_for_run_path).mkdir(parents=True, exist_ok=True)
+        self.logger.info(f"Created folder for run: {folder_for_run_path}")
         self._create_sample_dirs(folder_for_run_path)
         self._create_general_file(folder_for_run_path)
         self._create_patient_files_if_clinical_data_exist(folder_for_run_path)
@@ -64,6 +66,8 @@ class OldMiseqRunOrganiser(OrganiseRun):
             Path(new_pseudo_folder).mkdir(parents=True, exist_ok=True)
             self._collect_data_for_pseudo_number(new_pseudo_folder, pseudo_number)
 
+        self.logger.info(f"Created sample directories in: {run_samples_path}")
+
     def _create_general_file(self, new_file_path):
         general_file_path = os.path.join(self.pseudo_run, self.file)
         new_general_file_path = os.path.join(new_file_path, self.file)
@@ -71,6 +75,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
 
         self._copy_important_files(general_file_path, new_general_file_path)
         self._copy_important_folders(general_file_path, new_general_file_path)
+        self.logger.info(f"Copied important files and directories into: {new_general_file_path}")
 
     def _copy_important_files(self, old_path, new_path):
         files_to_move = ["runParameters.xml", "RunInfo.xml", "CompletedJobInfo.xml",
@@ -166,6 +171,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
         clinical_info_path = os.path.join(folder_for_run_path, self.file, "catalog_info_per_pred_number")
 
         if not os.path.exists(clinical_info_path):
+            self.logger.debug(f"No clinical data found at {clinical_info_path}, skipping patient file creation.")
             return
 
         for file in os.listdir(clinical_info_path):
@@ -184,14 +190,15 @@ class OldMiseqRunOrganiser(OrganiseRun):
             patient_metadata_file = os.path.join(patient_folder, "patient_metadata.json")
             with open(patient_metadata_file, "w") as f:
                 json.dump(data, f, indent=4)
+            self.logger.info(f"Wrote patient metadata for patient id {data['ID']} to {patient_metadata_file}")
+
             src = os.path.join(folder_for_run_path, self.file, "Samples", predictive_number)
             dst = os.path.join(patient_folder, predictive_number)
             try:
                 if os.path.exists(src) and not os.path.exists(dst):
                     os.symlink(src, dst)
-                    print(f"Created symlink: {dst} → {src}")
+                    self.logger.info(f"Created symlink {dst} → {src}")
                 else:
-                    print(f"Skipping symlink: {dst} already exists or {src} not found")
+                    self.logger.info(f"Skipping symlink: {dst} already exists or {src} not found")
             except OSError as e:
-                print("Symlink failed")
-                traceback.print_exc()
+                self.logger.exception(f"Failed to create symlink {dst} → {src}")
