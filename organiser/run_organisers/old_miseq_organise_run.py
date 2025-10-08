@@ -171,7 +171,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
         clinical_info_path = os.path.join(folder_for_run_path, self.file, "catalog_info_per_pred_number")
 
         if not os.path.exists(clinical_info_path):
-            self.logger.debug(f"No clinical data found at {clinical_info_path}, skipping patient file creation.")
+            self.logger.info(f"No clinical data found at {clinical_info_path}, skipping patient file creation.")
             return
 
         for file in os.listdir(clinical_info_path):
