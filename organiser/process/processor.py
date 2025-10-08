@@ -29,7 +29,6 @@ class Processor:
             logger.info(f"Organising: {run}")
             organiser = self._get_correct_organiser(run)
             self._try_organise_run(run, organiser)
-            logger.info(f"Run {run} was organised!")
 
 
     def _try_organise_run(self, run, organiser) -> bool:
@@ -38,7 +37,7 @@ class Processor:
             organiser.organise_run()
             shutil.move(os.path.join(self.psedunymized_runs_folder, run),
                         os.path.join(self.organised_files_folder, "backups", run))
-            logger.info(f"Run {run} moved into backups")
+            logger.info(f"Run {run} was organized successfuly and moved into backups")
             return True
         except FileNotFoundError as e:
             logger.exception(f"Run {run} is missing some data\nError:\n{e}")
