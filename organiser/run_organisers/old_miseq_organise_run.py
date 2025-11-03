@@ -78,7 +78,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
         self.logger.info(f"Copied important files and directories into: {new_general_file_path}")
 
     def _copy_important_files(self, old_path, new_path):
-        files_to_move = ["runParameters.xml", "RunInfo.xml", "CompletedJobInfo.xml",
+        files_to_move = ["runParameters.xml", "RunParameters.xml", "RunInfo.xml", "CompletedJobInfo.xml",
                          "GenerateFASTQRunStatistics.xml", "AnalysisLog.txt", "SampleSheet.csv"]
 
         for file in files_to_move:
