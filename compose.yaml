@@ -7,10 +7,9 @@ services:
     environment:
       LOG_LEVEL: INFO
     volumes:
-      - /mnt/c/Users/forma/Work_BBRMI/seq_pipeline_sandbox/muni-ss/OrganisedRuns/:/OrganisedRuns
-      - /mnt/c/Users/forma/Work_BBRMI/seq_pipeline_sandbox/muni-ss/PSEUDONYMIZED/:/PseudonymizedRuns
-      - /mnt/c/Users/forma/Work_BBRMI/seq_pipeline_sandbox/muni-ss/Patients/:/Patients
+      - /home/mf16/work/bbmri/sandbox/muni-sc/:/muni-sc/
     command: bash -c "python main.py
-                              -r /PseudonymizedRuns/
-                              -o /OrganisedRuns/
-                              -p /Patients/"
+                              -r /muni-sc/pseudonymized_runs/
+                              -o /muni-sc/organized_runs/
+                              -p /muni-sc/Patients/
+                              -l /muni-sc/organized_runs/logs/organizer"
