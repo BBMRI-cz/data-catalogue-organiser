@@ -13,7 +13,7 @@ Organises pseudonymized sequencing files into the following structure:
 Miseq, New Miseq, MammaPrint
 
 ## How to run the scripts
-### Locally - Development
+### Dev environment
 #### Using main.py
 1. Install requirements
 ```bash
@@ -25,8 +25,35 @@ python main.py -r path/to/pseudonymized/runs/folder  -o /path/to/root/organisati
 ```
 #### Using docker-compose
 ```bash
-docker-compose up -f compose.yml -d --build
+docker compose up -f compose.yml -d --build
 ```
+### Test environment
+
+#### Folder structure
+/muni-sc/test/\
+├── Libraries/               # Required libraries\
+├── pseudonymized_runs/      # Input runs from pseudonymisation\
+├── Patients/                # Patient metadata\
+├── organized_runs/          # Organised runs output\
+│   └── logs/                # Logs from organiser runs
+
+#### Running a Test
+1. Have some pseudonymized runs you want to organise in pseudonymized_runs/
+
+2. Start the organiser:
+```
+docker compose -f compose.test.yml up --build
+```
+
+#### Viewing Logs
+Logs for each run are in `/muni-sc/test/organized_runs/logs/organizer`.
+
+To view all service logs:
+```
+docker compose -f compose.test.yml logs
+```
+
+
 ### In production
 Production is running on Kubernetes cluster SensitiveCloud
 #### Using kubernetes (kubectl)
