@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+  run:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      LOG_LEVEL: DEBUG
+    volumes:
+      - /muni-sc/test/:/muni-sc/
+    command: bash -c "python main.py
+                              -r /muni-sc/pseudonymized_runs/
+                              -o /muni-sc/organized_runs/
+                              -p /muni-sc/Patients/
+                              -l /muni-sc/organized_runs/logs/organizer"
