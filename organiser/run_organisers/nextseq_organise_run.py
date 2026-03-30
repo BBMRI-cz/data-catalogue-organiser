@@ -3,6 +3,7 @@ from organiser.run_organisers.old_miseq_organise_run import OldMiseqRunOrganiser
 import os
 from pathlib import Path
 
+
 class NextSeqRunOrganiser(OldMiseqRunOrganiser):
 
     def organise_run(self):
@@ -17,24 +18,33 @@ class NextSeqRunOrganiser(OldMiseqRunOrganiser):
         return os.path.join(folder_for_run_path, self.file)
 
     def _create_general_file(self, new_file_path):
-        self._copy_important_files(os.path.join(self.pseudo_run, self.file), os.path.join(new_file_path, self.file))
-        self._copy_important_folders(os.path.join(self.pseudo_run, self.file), os.path.join(new_file_path, self.file))
-        self.logger.info(f"Copied important files and directories into: {os.path.join(new_file_path, self.file)}")
-
+        self._copy_important_files(
+            os.path.join(self.pseudo_run, self.file),
+            os.path.join(new_file_path, self.file),
+        )
+        self._copy_important_folders(
+            os.path.join(self.pseudo_run, self.file),
+            os.path.join(new_file_path, self.file),
+        )
+        self.logger.info(
+            f"Copied important files and directories into: {os.path.join(new_file_path, self.file)}"
+        )
 
     def _copy_important_files(self, old_path, new_path):
-        files_to_move = ["RunInfo.xml", "RunParameters.xml", "RunCompletionStatus.xml", "SampleSheet.csv"]
+        files_to_move = [
+            "RunInfo.xml",
+            "RunParameters.xml",
+            "RunCompletionStatus.xml",
+            "SampleSheet.csv",
+        ]
 
         for file in files_to_move:
             old_file_path = os.path.join(old_path, file)
             new_file_path = os.path.join(new_path, file)
             copy_if_exists(old_file_path, new_file_path)
 
-
     def _copy_important_folders(self, old_path, new_path):
-        folders_path = [
-            "catalog_info_per_pred_number"
-        ]
+        folders_path = ["catalog_info_per_pred_number"]
         for folder in folders_path:
             old_folder_path = os.path.join(old_path, folder)
             new_folder_path = os.path.join(new_path, folder)

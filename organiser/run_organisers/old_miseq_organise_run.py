@@ -13,8 +13,13 @@ from organiser.logging_config.logging_config import LoggingConfig
 
 class OldMiseqRunOrganiser(OrganiseRun):
 
-    def __init__(self, path_to_pseudonymized_runs_folder, name_of_single_run,
-                 path_to_oragnised_storage, path_to_patients):
+    def __init__(
+        self,
+        path_to_pseudonymized_runs_folder,
+        name_of_single_run,
+        path_to_oragnised_storage,
+        path_to_patients,
+    ):
         self.pseudo_run = path_to_pseudonymized_runs_folder
         self.file = name_of_single_run
         self.organised_runs = path_to_oragnised_storage
@@ -44,7 +49,9 @@ class OldMiseqRunOrganiser(OrganiseRun):
         if os.path.exists(analysis):
             return "complete-runs"
         else:
-            sample_sheet_path = os.path.join(self.pseudo_run, self.file, "SampleSheet.csv")
+            sample_sheet_path = os.path.join(
+                self.pseudo_run, self.file, "SampleSheet.csv"
+            )
             df = pd.read_csv(sample_sheet_path, header=None)
             experiment_name_row = df[df[0] == "Experiment Name"]
             if experiment_name_row.empty:
@@ -75,11 +82,20 @@ class OldMiseqRunOrganiser(OrganiseRun):
 
         self._copy_important_files(general_file_path, new_general_file_path)
         self._copy_important_folders(general_file_path, new_general_file_path)
-        self.logger.info(f"Copied important files and directories into: {new_general_file_path}")
+        self.logger.info(
+            f"Copied important files and directories into: {new_general_file_path}"
+        )
 
     def _copy_important_files(self, old_path, new_path):
-        files_to_move = ["runParameters.xml", "RunParameters.xml", "RunInfo.xml", "CompletedJobInfo.xml",
-                         "GenerateFASTQRunStatistics.xml", "AnalysisLog.txt", "SampleSheet.csv"]
+        files_to_move = [
+            "runParameters.xml",
+            "RunParameters.xml",
+            "RunInfo.xml",
+            "CompletedJobInfo.xml",
+            "GenerateFASTQRunStatistics.xml",
+            "AnalysisLog.txt",
+            "SampleSheet.csv",
+        ]
 
         for file in files_to_move:
             run_parameters = os.path.join(old_path, file)
@@ -87,8 +103,10 @@ class OldMiseqRunOrganiser(OrganiseRun):
             copy_if_exists(run_parameters, new_run_parameters)
 
     def _copy_important_folders(self, old_path, new_path):
-        folder_paths = [os.path.join("Data", "Intensities", "BaseCalls", "Alignment"),
-                        "catalog_info_per_pred_number"]
+        folder_paths = [
+            os.path.join("Data", "Intensities", "BaseCalls", "Alignment"),
+            "catalog_info_per_pred_number",
+        ]
         for folder in folder_paths:
             old_folder_path = os.path.join(old_path, folder)
             new_folder_path = os.path.join(new_path, os.path.basename(folder))
@@ -103,15 +121,18 @@ class OldMiseqRunOrganiser(OrganiseRun):
         return pseudo_numbers
 
     def _collect_data_for_pseudo_number(self, new_folder, pseudo_number):
-        basecalls = os.path.join(self.pseudo_run, self.file, "Data", "Intensities", "BaseCalls")
+        basecalls = os.path.join(
+            self.pseudo_run, self.file, "Data", "Intensities", "BaseCalls"
+        )
 
         new_fastq_folder = os.path.join(new_folder, "FASTQ")
         Path(new_fastq_folder).mkdir(parents=True, exist_ok=True)
 
         for file in os.listdir(basecalls):
             if pseudo_number in file:
-                copy_if_exists(os.path.join(basecalls, file),
-                               os.path.join(new_fastq_folder, file))
+                copy_if_exists(
+                    os.path.join(basecalls, file), os.path.join(new_fastq_folder, file)
+                )
 
         self._collect_analysis(new_folder, pseudo_number)
 
@@ -122,20 +143,35 @@ class OldMiseqRunOrganiser(OrganiseRun):
             Path(new_analysis).mkdir(parents=True, exist_ok=True)
 
             if os.path.exists(os.path.join(analysis, "BAM")):
-                self._get_bams(os.path.join(analysis, "BAM"), new_analysis, pseudo_number)
+                self._get_bams(
+                    os.path.join(analysis, "BAM"), new_analysis, pseudo_number
+                )
             else:
-                self.logger.warning(f"Path {os.path.join(analysis, 'BAM')} does not exist!")
+                self.logger.warning(
+                    f"Path {os.path.join(analysis, 'BAM')} does not exist!"
+                )
 
             for file in os.listdir(analysis):
                 if "_Output" in file and pseudo_number in file:
                     modified_pseudo_number = file.replace("_Output", "")
-                    if os.path.exists(os.path.join(analysis, file, modified_pseudo_number)):
-                        self._get_outputs(os.path.join(analysis, file, modified_pseudo_number),
-                                          new_analysis, modified_pseudo_number)
+                    if os.path.exists(
+                        os.path.join(analysis, file, modified_pseudo_number)
+                    ):
+                        self._get_outputs(
+                            os.path.join(analysis, file, modified_pseudo_number),
+                            new_analysis,
+                            modified_pseudo_number,
+                        )
                     elif os.path.exists(os.path.join(analysis, file, "sens")):
-                        self._get_outputs(os.path.join(analysis, file, "sens"), new_analysis, modified_pseudo_number)
+                        self._get_outputs(
+                            os.path.join(analysis, file, "sens"),
+                            new_analysis,
+                            modified_pseudo_number,
+                        )
                     if os.path.exists(os.path.join(analysis, file, "Preprocessed")):
-                        self._get_convert(os.path.join(analysis, file, "Preprocessed"), new_analysis)
+                        self._get_convert(
+                            os.path.join(analysis, file, "Preprocessed"), new_analysis
+                        )
 
     def _get_bams(self, path, new_path, pseudo_number):
         for file in os.listdir(path):
@@ -145,7 +181,7 @@ class OldMiseqRunOrganiser(OrganiseRun):
     def _get_outputs(self, path, new_path, pseudo_number):
         parameters = os.path.join(path, f"{pseudo_number}_Parameters.txt")
         stat_info = os.path.join(path, f"{pseudo_number}_StatInfo.txt")
-        reports_folder = os.path.join(path,  "Reports")
+        reports_folder = os.path.join(path, "Reports")
         bamconversion = os.path.join(path, "bamconversion.log")
 
         new_parameters = os.path.join(new_path, f"{pseudo_number}_Parameters.txt")
@@ -168,10 +204,14 @@ class OldMiseqRunOrganiser(OrganiseRun):
                 shutil.copy2(os.path.join(path, file), os.path.join(new_path, file))
 
     def _create_patient_files_if_clinical_data_exist(self, folder_for_run_path):
-        clinical_info_path = os.path.join(folder_for_run_path, self.file, "catalog_info_per_pred_number")
+        clinical_info_path = os.path.join(
+            folder_for_run_path, self.file, "catalog_info_per_pred_number"
+        )
 
         if not os.path.exists(clinical_info_path):
-            self.logger.info(f"No clinical data found at {clinical_info_path}, skipping patient file creation.")
+            self.logger.info(
+                f"No clinical data found at {clinical_info_path}, skipping patient file creation."
+            )
             return
 
         for file in os.listdir(clinical_info_path):
@@ -182,23 +222,33 @@ class OldMiseqRunOrganiser(OrganiseRun):
 
             split_birth = data["birth"].split("/")
             if len(split_birth) == 2:
-                year = split_birth [1] # old format
+                year = split_birth[1]  # old format
             else:
-                year = split_birth [2] # new format
-            patient_folder = os.path.join(self.organised_patients, year, f"{data['ID']}")
+                year = split_birth[2]  # new format
+            patient_folder = os.path.join(
+                self.organised_patients, year, f"{data['ID']}"
+            )
             Path(patient_folder).mkdir(parents=True, exist_ok=True)
-            patient_metadata_file = os.path.join(patient_folder, "patient_metadata.json")
+            patient_metadata_file = os.path.join(
+                patient_folder, "patient_metadata.json"
+            )
             with open(patient_metadata_file, "w") as f:
                 json.dump(data, f, indent=4)
-            self.logger.info(f"Wrote patient metadata for patient id {data['ID']} to {patient_metadata_file}")
+            self.logger.info(
+                f"Wrote patient metadata for patient id {data['ID']} to {patient_metadata_file}"
+            )
 
-            src = os.path.join(folder_for_run_path, self.file, "Samples", predictive_number)
+            src = os.path.join(
+                folder_for_run_path, self.file, "Samples", predictive_number
+            )
             dst = os.path.join(patient_folder, predictive_number)
             try:
                 if os.path.exists(src) and not os.path.exists(dst):
                     os.symlink(src, dst)
                     self.logger.info(f"Created symlink {dst} → {src}")
                 else:
-                    self.logger.info(f"Skipping symlink: {dst} already exists or {src} not found")
+                    self.logger.info(
+                        f"Skipping symlink: {dst} already exists or {src} not found"
+                    )
             except OSError as e:
                 self.logger.exception(f"Failed to create symlink {dst} → {src}")
