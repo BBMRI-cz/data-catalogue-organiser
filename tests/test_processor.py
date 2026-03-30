@@ -66,10 +66,10 @@ def mocked_nextseq_organise_run(mocker):
 
 
 def test_select_old_miseq(setup_and_teardown_old_miseq, mocked_old_miseq_organise_run, mocked_new_miseq_organise_run,
-                          mocked_nextseq_organise_run):
+                          mocked_nextseq_organise_run, tmp_path):
     processor = Processor(FAKE_ALL_RUNS_FOR_TESTING,
                           FAKE_DESTINATION_FILES,
-                          FAKE_PATIENT_FILES)
+                          FAKE_PATIENT_FILES, tmp_path)
     processor.process_runs()
     mocked_old_miseq_organise_run.assert_called_once()
     mocked_new_miseq_organise_run.assert_not_called()
@@ -77,10 +77,10 @@ def test_select_old_miseq(setup_and_teardown_old_miseq, mocked_old_miseq_organis
 
 
 def test_select_new_miseq(setup_and_teardown_new_miseq, mocked_new_miseq_organise_run, mocked_old_miseq_organise_run,
-                          mocked_nextseq_organise_run):
+                          mocked_nextseq_organise_run, tmp_path):
     processor = Processor(FAKE_ALL_RUNS_FOR_TESTING,
                           FAKE_DESTINATION_FILES,
-                          FAKE_PATIENT_FILES)
+                          FAKE_PATIENT_FILES, tmp_path)
     processor.process_runs()
     mocked_new_miseq_organise_run.assert_called_once()
     mocked_old_miseq_organise_run.assert_not_called()
@@ -89,10 +89,10 @@ def test_select_new_miseq(setup_and_teardown_new_miseq, mocked_new_miseq_organis
 
 def test_new_and_old_miseq_called(setup_and_teardown_new_miseq, setup_and_teardown_old_miseq,
                                   mocked_new_miseq_organise_run, mocked_old_miseq_organise_run,
-                                  mocked_nextseq_organise_run):
+                                  mocked_nextseq_organise_run, tmp_path):
     processor = Processor(FAKE_ALL_RUNS_FOR_TESTING,
                           FAKE_DESTINATION_FILES,
-                          FAKE_PATIENT_FILES)
+                          FAKE_PATIENT_FILES, tmp_path)
     processor.process_runs()
     mocked_new_miseq_organise_run.assert_called_once()
     mocked_old_miseq_organise_run.assert_called_once()
@@ -102,11 +102,11 @@ def test_new_and_old_miseq_called(setup_and_teardown_new_miseq, setup_and_teardo
 def test_select_nextseq(setup_and_teardown_nextseq,
                         mocked_nextseq_organise_run,
                         mocked_old_miseq_organise_run,
-                        mocked_new_miseq_organise_run):
+                        mocked_new_miseq_organise_run, tmp_path):
 
     processor = Processor(FAKE_ALL_RUNS_FOR_TESTING,
                           FAKE_DESTINATION_FILES,
-                          FAKE_PATIENT_FILES)
+                          FAKE_PATIENT_FILES, tmp_path)
     processor.process_runs()
 
     mocked_nextseq_organise_run.assert_called_once()

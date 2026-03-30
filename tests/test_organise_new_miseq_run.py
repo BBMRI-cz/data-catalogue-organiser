@@ -17,6 +17,7 @@ FAKE_PATIENT_FILES = os.path.join(os.path.dirname(__file__), "test_patients")
 EXPECTED_ORGANISED_FILE_PATH = os.path.join(FAKE_DESTINATION_FILES,
                                             "2024",
                                             "MiSEQ",
+                                            "complete-runs",
                                             "240101_M00000_0000_00000000-00000")
 
 
@@ -59,7 +60,12 @@ def test_alignment_correct():
     organiser = get_organiser()
     organiser.organise_run()
 
-    assert os.path.exists(os.path.join(EXPECTED_ORGANISED_FILE_PATH, "Alignment"))
+    alignment_path = os.path.join(EXPECTED_ORGANISED_FILE_PATH, "Alignment")
+    print("Alignment path exists?", os.path.exists(alignment_path))
+    print("Contents of run folder:", os.listdir(EXPECTED_ORGANISED_FILE_PATH))
+    
+    assert os.path.exists(alignment_path)
+
 
 
 def test_catalog_info_per_pred_number():

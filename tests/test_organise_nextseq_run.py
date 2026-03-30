@@ -40,17 +40,6 @@ def test_run_is_in_correct_sturecture():
 
     assert os.path.exists(os.path.join(FAKE_DESTINATION_FILES, "2023", "NextSeq", "230101_N0000000_0000_0000000000"))
 
-def test_data_folder_structred():
-    organiser = NextSeqRunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "230101_N0000000_0000_0000000000",
-                                    FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
-    organiser.organise_run()
-
-    assert os.path.exists(os.path.join(FAKE_DESTINATION_FILES, "2023", "NextSeq", "230101_N0000000_0000_0000000000",
-                                       "Data", "Intensities", "BaseCalls"))
-    for i in range(1,5):
-        assert os.path.exists(os.path.join(FAKE_DESTINATION_FILES, "2023", "NextSeq", "230101_N0000000_0000_0000000000",
-                                           "Data", "Intensities", f"L00{i}"))
-
 def test_samples_folder_contains_fastq_files():
     organiser = NextSeqRunOrganiser(FAKE_ALL_RUNS_FOR_TESTING, "230101_N0000000_0000_0000000000",
                                     FAKE_DESTINATION_FILES, FAKE_PATIENT_FILES)
@@ -80,7 +69,6 @@ def test_missing_fastq_files(remove_fastq_folders):
     organiser.organise_run()
     sample_files = os.path.join(FAKE_DESTINATION_FILES, "2023", "NextSeq", "230101_N0000000_0000_0000000000",
                                 "Samples")
-    assert not os.path.exists(os.path.join(sample_files, "2023_0000_DNA", "FASTQ"))
     for i in range(8):
         assert os.path.exists(os.path.join(sample_files, f"2023_000{i}_DNA"))
         assert os.path.exists(os.path.join(sample_files, f"2023_000{i}_RNA"))

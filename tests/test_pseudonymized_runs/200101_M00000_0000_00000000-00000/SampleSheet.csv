@@ -1,24 +1,24 @@
-[Header]
-IEMFileVersion,4
-Investigator Name,lochmanova
-Experiment Name,Accel_200420
-Date,8/23/2020
-Workflow,GenerateFASTQ
-Application,FASTQ Only
-Assay,TruSeq HT
-Description,
-Chemistry,Amplicon
-
-[Reads]
-151
-151
-
-[Settings]
-ReverseComplement,0
-Adapter,AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
-AdapterRead2,AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
-
-[Data]
+[Header],,,,,,,,,,
+IEMFileVersion,4,,,,,,,,,
+Investigator Name,lochmanova,,,,,,,,,
+Experiment Name,Accel_200420,,,,,,,,,
+Date,8/23/2020,,,,,,,,,
+Workflow,GenerateFASTQ,,,,,,,,,
+Application,FASTQ Only,,,,,,,,,
+Assay,TruSeq HT,,,,,,,,,
+Description,,,,,,,,,,
+Chemistry,Amplicon,,,,,,,,,
+,,,,,,,,,,
+[Reads],,,,,,,,,,
+151,,,,,,,,,
+151,,,,,,,,,
+,,,,,,,,,,
+[Settings],,,,,,,,,,
+ReverseComplement,0,,,,,,,,,
+Adapter,AGATCGGAAGAGCACACGTCTGAACTCCAGTCA,,,,,,,,,
+AdapterRead2,AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT,,,,,,,,,
+,,,,,,,,,,
+[Data],,,,,,,,,,
 Sample_ID,Sample_Name,Sample_Plate,Sample_Well,I7_Index_ID,index,I5_Index_ID,index2,Sample_Project,Description
 mmci_predictive_00000000-0000-0000-0000-000000000001,mmci_predictive_00000000-0000-0000-0000-000000000001,,,D708,TAATGCGC,D506,TAATCTTA,,
 mmci_predictive_00000000-0000-0000-0000-000000000002,mmci_predictive_00000000-0000-0000-0000-000000000002,,,D708,TAATGCGC,D507,CAGGACGT,,

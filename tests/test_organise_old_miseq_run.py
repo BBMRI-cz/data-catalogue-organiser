@@ -41,13 +41,13 @@ def setup_and_teardown_organise_files(request):
 @pytest.fixture
 def mamaprint_experiment_name():
     sample_sheet_path = os.path.join(FAKE_RUN_FOR_TESTING, "SampleSheet.csv")
-    df = pd.read_csv(sample_sheet_path, delimiter=",",
-                     names=["[Header]", "Unnamed: 1", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4",
-                            "Unnamed: 5", "Unnamed: 6", "Unnamed: 7", "Unnamed: 8", "Unnamed: 9"])
+    df = pd.read_csv(sample_sheet_path, header=None, dtype=str)
 
-    experiment_name = df[df["[Header]"] == "Experiment Name"]["Unnamed: 1"].tolist()[0]
-    df.at[3, "Unnamed: 1"] = "MP-255"
-    df.to_csv(sample_sheet_path)
+    experiment_row = df[df[0] == "Experiment Name"].index
+    if not experiment_row.empty:
+        df.at[experiment_row[0], 1] = "MP-255"
+
+    df.to_csv(sample_sheet_path, index=False, header=False)
 
 
 def test_folder_structure_correct():
@@ -169,5 +169,9 @@ def test_alignment_folder():
 
     expected_run_folder = os.path.join(FAKE_DESTINATION_FILES, "2020", "MiSEQ", "complete-runs",
                                        "200101_M00000_0000_00000000-00000")
+
+    print("Expected run folder exists?", os.path.exists(expected_run_folder))
+    print("Contents:", os.listdir(os.path.dirname(expected_run_folder)))
+    print("Subfolders in run folder:", os.listdir(expected_run_folder) if os.path.exists(expected_run_folder) else "Run folder missing")
 
     assert os.path.exists(os.path.join(expected_run_folder, "Alignment"))
