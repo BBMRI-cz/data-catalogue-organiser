@@ -27,8 +27,10 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
 
         for file in os.listdir(fastq_folder):
             if pseudo_number in file:
-                copy_if_exists(os.path.join(fastq_folder, file),
-                               os.path.join(new_fastq_folder, file))
+                copy_if_exists(
+                    os.path.join(fastq_folder, file),
+                    os.path.join(new_fastq_folder, file),
+                )
 
         self._collect_analysis(new_folder, pseudo_number)
 
@@ -39,7 +41,9 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
 
         self._copy_important_files(general_file_path, new_general_file_path)
         self._copy_important_folders(general_file_path, new_general_file_path)
-        self.logger.info(f"Copied important files and directories into: {new_general_file_path}")
+        self.logger.info(
+            f"Copied important files and directories into: {new_general_file_path}"
+        )
 
     def _copy_important_files(self, old_path, new_path):
         files_to_move = [
@@ -48,7 +52,7 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
             "RunParameters.xml",
             "RunInfo.xml",
             "SampleSheet.csv",
-            "GenerateFASTQRunStatistics.xml"
+            "GenerateFASTQRunStatistics.xml",
         ]
         for file in files_to_move:
             base = os.path.basename(file)
@@ -59,7 +63,7 @@ class NewMiseqRunOrganiser(OldMiseqRunOrganiser):
     def _copy_important_folders(self, old_path, new_path):
         folder_paths = [
             ("Alignment_1", "Alignment", ["Fastq"]),
-            ("catalog_info_per_pred_number", "catalog_info_per_pred_number", None)
+            ("catalog_info_per_pred_number", "catalog_info_per_pred_number", None),
         ]
         for old, new, ignore in folder_paths:
             old_folder_path = os.path.join(old_path, old)
